@@ -1,4 +1,4 @@
-# chums
+# Chums
 
 An app for housemates' organization of tasks
 

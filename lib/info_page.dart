@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
 import 'home_page.dart';
+import 'models/circle.dart';
 class InfoPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
-  InfoPage({Key? key, required this.title}) : super(key: key);
+  InfoPage({Key? key, required this.title, required this.circle}) : super(key: key);
   final String title;
+  Circle circle;
   @override
   _InfoPageState createState() => _InfoPageState();
 }
@@ -31,7 +33,7 @@ class _InfoPageState extends State<InfoPage> {
                   child: IconButton(
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => HomePage(title: widget.title)));
+                            builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
                       },
                       icon: Icon(Icons.home_filled)
                   ),
@@ -43,7 +45,7 @@ class _InfoPageState extends State<InfoPage> {
                       onPressed: (){
                         {
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => TaskPage(title: widget.title)));
+                              builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
                         }
                       },
                       icon: Icon(Icons.list_alt_outlined)
@@ -55,7 +57,7 @@ class _InfoPageState extends State<InfoPage> {
                   child: IconButton(
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => AddPage(title: widget.title)));
+                            builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
                       },
                       icon: Icon(Icons.add_circle_outline)
                   ),
@@ -66,7 +68,7 @@ class _InfoPageState extends State<InfoPage> {
                   child: IconButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => ExpensesPage(title: widget.title)));
+                            builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
                       },
                       icon: Icon(Icons.monetization_on_outlined)
                   ),
@@ -77,7 +79,7 @@ class _InfoPageState extends State<InfoPage> {
                   child: IconButton(
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => InfoPage(title: widget.title)));
+                            builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
                       },
                       icon: Icon(Icons.info_outlined)
                   ),

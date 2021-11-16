@@ -22,13 +22,14 @@ class Circle{
       this.members,
       this.host,
       this.name,
-      { //If value not specified --> follows implementation after the colon
+      allTasks, allAnnouncements, allExpenses, allReminders,
+      /*{ //If value not specified --> follows implementation after the colon
         List<Item>? allTasks,
         List<Item>? allAnnouncements,
         List<Item>? allExpenses,
         List<Item>? allReminders,
         Setup? settings
-      }):
+      }*/):
         allTasks = allTasks ?? [],
         allAnnouncements = allAnnouncements ?? [],
         allExpenses = allExpenses ?? [],
@@ -37,6 +38,26 @@ class Circle{
 
 
   //Setter methods:
+  addItem(Item item){
+    int type = item.getType();
+    switch(type) {
+      case 1:
+        addTask(item);
+        break;
+      case 2:
+        addAnnouncement(item);
+        break;
+      case 3:
+        addReminder(item);
+        break;
+      case 4:
+        addExpense(item);
+        break;
+      default:
+        type = -1;
+        break;
+    }
+  }
   addMember(User newMember) {
     members.add(newMember);
   }

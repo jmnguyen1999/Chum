@@ -7,13 +7,20 @@ class User{
   String password;
   List<String> circleIds;
 
-  User(this.username, this.password, this.email, this.fname, this.lname, {List<String>? circleIds}) : circleIds = circleIds ?? [];
+  User(this.username, this.password, this.email, this.fname, this.lname, circleIds
+      /*{
+        List<String>? circleIds
+      }*/) : circleIds = circleIds ?? [];
 
   //Purpose: This user joins a new circle
   joinGroup(String circleId){
     //TODO: Check if valid circleId/can find it:
 
     circleIds.add(circleId);
+  }
+
+  String getFName(){
+    return fname;
   }
 
 }

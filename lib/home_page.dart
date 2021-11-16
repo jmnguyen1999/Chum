@@ -1,3 +1,4 @@
+import 'package:chums/add_dialog.dart';
 import 'package:chums/task_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
 import 'info_page.dart';
+import 'models/circle.dart';
 import 'models/item.dart';
 import 'models/user.dart';
 class HomePage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
-  HomePage({Key? key, required this.title}) : super(key: key);
+  HomePage({Key? key, required this.title, required this.circle}) : super(key: key);
   final String title;
+  Circle circle;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -34,22 +37,21 @@ class _HomePageState extends State<HomePage> {
   ];*/
 
   List<Item> i1 = <Item>[
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-  Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-  Item(1, 'Take out trashhh', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-  Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8))
+ /* Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
+  Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
+  Item(1, 'Take out trashhh', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
+  Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8))*/
   ];
 
-  List<Item> i2 = <Item>[Item(1, 'Something therre', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 9))];
+  List<Item> i2 = <Item>[/*Item(1, 'Something therre', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 9))*/];
   List<Item> i3 = <Item>[
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
+  /*Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
+  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),*/
   ];
   List<Item> i4 = <Item>[
-
+/*
   Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
+  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),*/
   ];
 
   List<List<Item>> orderedTasks = [];
@@ -57,31 +59,40 @@ class _HomePageState extends State<HomePage> {
 
   //List<User> test = <User>[User("Nobob", "pass", "email", "Po", "Lam")];
   List<Item> announcements = <Item>[
-    Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
+    /*Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
     Item(2, 'Martha\'s family visiting', User("loluser", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
-    Item(2, 'Water filter broken, we need to find another', User("heyBob", "pass", "email", "Po", "Lam"), null, null)
+    Item(2, 'Water filter broken, we need to find another', User("heyBob", "pass", "email", "Po", "Lam"), null, null)*/
   ];
 
 
   @override
   Widget build(BuildContext context) {
-    List<User> test = <User>[User("Nobob", "pass", "email", "Po", "Lam")];
-    /*List<Item> announcements = <Item>[
-      Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam"), test, DateTime(2021, 10, 11)),
-      Item(2, 'Martha\'s family visiting', User("loluser", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
-      Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam"), test, null)
-    ];*/
-    Item i = announcements[0];
-    if(i.getMembersAssigned().isEmpty){
-      print("Okay we ok");
+    List<Item> allTasks = widget.circle.getAllTasks();
+    if(allTasks.isEmpty){
+      print("alltasks is empty still");
     }
     else{
-      print(i.getMembersAssigned().elementAt(0).username);
-      print(i.getDateString());
+      print("allTasks not empty");
     }
+    List<Item> announcements = widget.circle.getAllAnnouncements();
+    List<Item> reminders = widget.circle.getAllReminders();
+    List<Item> expenses = widget.circle.getAllExpenses();
+    print("In home page, received these firsts: task = " + allTasks[0].getDescription() + "   announcement= " + announcements[0].getDescription() );/*+ "   reminder = " + reminders[0].getDescription()+ "   expenses= " + expenses[0].getDescription());*/
 
+    Item i = announcements[0];
+
+    //Traverse through tasks to order them by date and put into 2d list:
+    //TODO: For now im hard coding this to get the example up:
+    i1.add(allTasks[0]);
+    i1.add(allTasks[1]);
+    i1.add(allTasks[2]);
+
+    i2.add(allTasks[3]);
+
+    i3.add(allTasks[4]);
+    i3.add(allTasks[5]);
     orderedTasks = [
-        i1,i2,i3,i4
+        i1,i2,i3
     ];
     print("String here: " + orderedTasks.length.toString());
 
@@ -102,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => HomePage(title: widget.title)));
+                              builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
                         },
                         icon: Icon(Icons.home_filled, color: Colors.white)
                     ),
@@ -114,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: (){
                           {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => TaskPage(title: widget.title)));
+                                builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
                           }
                         },
                         icon: Icon(Icons.list_alt_outlined, color: Colors.white)
@@ -125,8 +136,42 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title)));
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SimpleDialog(
+                                  title: Text('Choose an Option'),
+                                  children: <Widget>[
+                                    SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Option 1'),
+                                    ),
+                                    SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Option 2'),
+                                    ),
+                                    SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Option 3'),
+                                    ),
+                                    SimpleDialogOption(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Option 4'),
+                                    ),
+                                  ],
+                                );
+                              });
+
+                          /*Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AddPage(title: widget.title)));*/
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -137,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => ExpensesPage(title: widget.title)));
+                                builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
                           },
                         icon: Icon(Icons.monetization_on_outlined, color: Colors.white)
                     ),
@@ -148,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: (){
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => InfoPage(title: widget.title)));
+                                builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
                           },
                         icon: Icon(Icons.info_outlined, color: Colors.white)
                     ),
@@ -179,7 +224,7 @@ class _HomePageState extends State<HomePage> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  //Child #1: Title
+                  //Child #1: Title - What are we adding?
                     Row(
                       children: [
                         Container(
@@ -232,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                                         child: IconButton(
                                             onPressed: (){
                                               Navigator.push(context, MaterialPageRoute(
-                                                  builder: (context) => AddPage(title: widget.title)));
+                                                  builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
                                             },
                                             icon: Icon(Icons.add_circle_outline)
                                         ),
@@ -376,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                                                       child: IconButton(
                                                           onPressed: (){
                                                             Navigator.push(context, MaterialPageRoute(
-                                                                builder: (context) => AddPage(title: widget.title)));
+                                                                builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
                                                             },
                                                           icon: Icon(Icons.add_circle_outline)
                                                       ),

@@ -35,6 +35,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   int _counter = 0;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passController = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
@@ -47,6 +49,23 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  logIn(BuildContext context){
+    String username = usernameController.text;
+    String pass = passController.text;
+
+    int exampleCase = -1;
+    if(username == "jmnguyen"){
+      exampleCase = 1;
+    }
+    else{
+      exampleCase = 2;
+    }
+
+    print("login page sending username: " + username);
+    print("login page sending exampleCase: " + exampleCase.toString());
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => UserHomePage(title: widget.title, whichUserSignIn: exampleCase,)));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           margin: EdgeInsets.only(left:25, right: 25),
                           child: TextField(
                             obscureText: false,
-
+                                      controller: usernameController,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20)
@@ -115,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsets.only(left:25, right: 25),
                     child: TextField(
                       obscureText: false,
+                      controller: passController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)
@@ -131,8 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     margin: EdgeInsets.only(top:40, bottom:40),
                     child: ElevatedButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => UserHomePage(title: widget.title)));
+                          logIn(context);
                         },
                         child: Text('Sign In')
                     ),

@@ -88,71 +88,77 @@ class _AddPageState extends State<AddPage> {
         title: Text(widget.title),
       ),*/
 
-      bottomNavigationBar: Container(
-        height: 50,
-        child: BottomAppBar(
-            color: Color(0xFFC9E3DA),
-            shape: const CircularNotchedRectangle(),
-            child: Row(
-              children: [
-                //1.) Home Button: HomePage
-                Expanded(
-                  child: IconButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
-                      },
-                      icon: Icon(Icons.home_filled)
-                  ),
-                ),
-
-                //2.) Task Icon: TaskPage
-                Expanded(
-                  child: IconButton(
-                      onPressed: (){
-                        {
+        backgroundColor: Color(0xFFD5F3FE),
+        bottomNavigationBar: Container(
+          height: 50,
+          child: BottomAppBar(
+              color: Color(0xFF2565AE),
+              shape: const CircularNotchedRectangle(),
+              child: Row(
+                children: [
+                  //1.) Home Button: HomePage
+                  Expanded(
+                    child: IconButton(
+                        onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
-                        }
-                      },
-                      icon: Icon(Icons.list_alt_outlined)
+                              builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
+                        },
+                        icon: Icon(Icons.home_filled, color: Colors.white)
+                    ),
                   ),
-                ),
 
-                //3.) Add Icon: Add Dialog page - TODO
-                Expanded(
-                  child: IconButton(
-                      onPressed: (){},
-                      icon: Icon(Icons.add_circle_outline)
+                  //2.) Task Icon: TaskPage
+                  Expanded(
+                    child: IconButton(
+                        onPressed: (){
+                          {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
+                          }
+                        },
+                        icon: Icon(Icons.list_alt_outlined, color: Colors.white)
+                    ),
                   ),
-                ),
 
-                //4.) Money Icon: ExpensesPage - TODO: fix overflow
-                Expanded(
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
-                      },
-                      icon: Icon(Icons.monetization_on_outlined)
+                  //3.) Add Icon: Add Dialog page - TODO
+                  Expanded(
+                    child: IconButton(
+                        onPressed: (){
+
+
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                        },
+                        icon: Icon(Icons.add_circle_outline, color: Colors.white)
+                    ),
                   ),
-                ),
 
-                //5.) Info Icon: InfoPage
-                Expanded(
-                  child: IconButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
-                      },
-                      icon: Icon(Icons.info_outlined)
+                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
+                  Expanded(
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
+                        },
+                        icon: Icon(Icons.monetization_on_outlined, color: Colors.white)
+                    ),
                   ),
-                ),
 
-              ],
-            )
+                  //5.) Info Icon: InfoPage
+                  Expanded(
+                    child: IconButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
+                        },
+                        icon: Icon(Icons.info_outlined, color: Colors.white)
+                    ),
+                  ),
+
+                ],
+              )
+          ),
         ),
-      ),
 
       body:
         Center(

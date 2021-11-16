@@ -19,40 +19,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /*List<Item> orderedTasks = <Item>[
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-    Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-    Item(1, 'Take out trashhh', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-    Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 8)),
-    Item(1, 'Something therre', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 9)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 11)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 16)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 23)),
-    Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 23)),
-  ];*/
 
-  List<Item> i1 = <Item>[
- /* Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
-  Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
-  Item(1, 'Take out trashhh', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)),
-  Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8))*/
-  ];
-
-  List<Item> i2 = <Item>[/*Item(1, 'Something therre', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 9))*/];
-  List<Item> i3 = <Item>[
-  /*Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 10)),*/
-  ];
-  List<Item> i4 = <Item>[
-/*
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),
-  Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 9, 15)),*/
-  ];
+  List<Item> i1 = <Item>[];
+  List<Item> i2 = <Item>[];
+  List<Item> i3 = <Item>[];
+  List<Item> i4 = <Item>[];
 
   List<List<Item>> orderedTasks = [];
 
@@ -68,34 +39,54 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<Item> allTasks = widget.circle.getAllTasks();
-    if(allTasks.isEmpty){
-      print("alltasks is empty still");
+    announcements = widget.circle.getAllAnnouncements();
+
+    if(!allTasks.isEmpty) {
+      List<Item> reminders = widget.circle.getAllReminders();
+      List<Item> expenses = widget.circle.getAllExpenses();
+      print("In home page, received these firsts: task = " +
+          allTasks[0].getDescription() + "   announcement= " + announcements[0]
+          .getDescription()); /*+ "   reminder = " + reminders[0].getDescription()+ "   expenses= " + expenses[0].getDescription());*/
+
+      Item i = announcements[0];
+
+      //Traverse through tasks to order them by date and put into 2d list:
+      //TODO: For now im hard coding this to get the example up:
+      i1.add(allTasks[0]);
+      i1.add(allTasks[1]);
+      i1.add(allTasks[2]);
+
+      i2.add(allTasks[3]);
+
+      i3.add(allTasks[4]);
+      i3.add(allTasks[5]);
+
+
+      /* for(int index = 0; index < allTasks.length; index++){
+      Item currTask = allTasks[index];
+      DateTime currDate = currTask.getDate();
+      List<Item> currListForDate = <Item>[currTask];
+
+      //!(dueDate.compareTo(DateTime(1999)) == 0)
+      for(int j = index+1; j < allTasks.length; j++){
+        //if(j != index){
+          Item otherTask = allTasks[j];
+          DateTime otherDate = otherTask.getDate();
+
+          //If have same date --> add to list
+          if(currDate.compareTo(otherDate) == 0){
+            currListForDate.add(otherTask);
+          }
+        //}
+      }
+      orderedTasks.add(currListForDate);
+    }*/
+
+      orderedTasks = [
+        i1, i2, i3
+      ];
+      print("Length of orderedTasks: " + orderedTasks.length.toString());
     }
-    else{
-      print("allTasks not empty");
-    }
-    List<Item> announcements = widget.circle.getAllAnnouncements();
-    List<Item> reminders = widget.circle.getAllReminders();
-    List<Item> expenses = widget.circle.getAllExpenses();
-    print("In home page, received these firsts: task = " + allTasks[0].getDescription() + "   announcement= " + announcements[0].getDescription() );/*+ "   reminder = " + reminders[0].getDescription()+ "   expenses= " + expenses[0].getDescription());*/
-
-    Item i = announcements[0];
-
-    //Traverse through tasks to order them by date and put into 2d list:
-    //TODO: For now im hard coding this to get the example up:
-    i1.add(allTasks[0]);
-    i1.add(allTasks[1]);
-    i1.add(allTasks[2]);
-
-    i2.add(allTasks[3]);
-
-    i3.add(allTasks[4]);
-    i3.add(allTasks[5]);
-    orderedTasks = [
-        i1,i2,i3
-    ];
-    print("String here: " + orderedTasks.length.toString());
-
     return Scaffold(
 /*      appBar: AppBar(
         title: Text(widget.title),
@@ -136,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-                          showDialog(
+                          /*showDialog(
                               context: context,
                               builder: (context) {
                                 return SimpleDialog(
@@ -168,10 +159,10 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 );
-                              });
+                              });*/
 
-                          /*Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title)));*/
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -232,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             'Hello Jo,',
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 35,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Lato',
                             ),
@@ -263,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       Container(
                                         alignment: Alignment.topLeft,
-                                        margin: EdgeInsets.only(left: 20, top: 20),
+                                        margin: EdgeInsets.only(left: 20, top: 5),
                                         child: Text('Announcements',
                                             style: TextStyle(
                                                 fontSize: 24,

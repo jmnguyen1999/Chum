@@ -39,5 +39,8 @@ class Item{
     }
     return dueDate.toString();
   }
+  DateTime getDate(){
+    return dueDate;
+  }
 
 }

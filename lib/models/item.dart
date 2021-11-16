@@ -6,14 +6,15 @@ class Item{
   User author;
   DateTime dueDate;
   List<User> membersAssigned;   //Whos responsibility is it?
+//TODO: Separate into different types I think? B/c tasks need a isDone
 
-  Item(this.type, this.description, this.author,
-    {
+  Item(this.type, this.description, this.author, membersAssigned, dueDate,
+    /*{
       List<User>? membersAssigned,  //Nullable
       DateTime? dueDate
-    }) :
+    }*/) :
     membersAssigned = membersAssigned ?? [],
-    dueDate = DateTime(1999);
+    dueDate = dueDate ?? DateTime(1999);
 
 
   //Getter methods:
@@ -24,10 +25,19 @@ class Item{
     return description;
   }
   bool hasDueDate(){
-    return dueDate.compareTo(DateTime(1999)) == 0;
+    return !(dueDate.compareTo(DateTime(1999)) == 0);
   }
   int getType(){
     return type;
+  }
+  List<User> getMembersAssigned(){
+    return membersAssigned;
+  }
+  String getDateString(){
+    if(!hasDueDate()){
+      return "N/A";
+    }
+    return dueDate.toString();
   }
 
 }

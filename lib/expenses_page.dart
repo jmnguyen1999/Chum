@@ -1,6 +1,8 @@
 import 'package:chums/task_page.dart';
 import 'package:flutter/material.dart';
 
+import 'add_page.dart';
+import 'home_page.dart';
 import 'info_page.dart';
 class ExpensesPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
@@ -25,12 +27,18 @@ class _ExpensesPageState extends State<ExpensesPage> {
               shape: const CircularNotchedRectangle(),
               child: Row(
                 children: [
+                  //1.) Home Button: HomePage
                   Expanded(
                     child: IconButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => HomePage(title: widget.title)));
+                        },
                         icon: Icon(Icons.home_filled)
                     ),
                   ),
+
+                  //2.) Task Icon: TaskPage
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -42,12 +50,19 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         icon: Icon(Icons.list_alt_outlined)
                     ),
                   ),
+
+                  //3.) Add Icon: Add Dialog page - TODO
                   Expanded(
                     child: IconButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AddPage(title: widget.title)));
+                        },
                         icon: Icon(Icons.add_circle_outline)
                     ),
                   ),
+
+                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
                   Expanded(
                     child: IconButton(
                         onPressed: () {
@@ -57,6 +72,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         icon: Icon(Icons.monetization_on_outlined)
                     ),
                   ),
+
+                  //5.) Info Icon: InfoPage
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -66,10 +83,13 @@ class _ExpensesPageState extends State<ExpensesPage> {
                         icon: Icon(Icons.info_outlined)
                     ),
                   ),
+
                 ],
               )
           ),
         ),
+
+
         body: Center(
             child: Column(
                 children: [

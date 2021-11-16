@@ -53,6 +53,8 @@ flutter:
     - assets/white_background_logo.jpg
     - assets/user_icon.png
     - assets/lock_icon.png
+
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

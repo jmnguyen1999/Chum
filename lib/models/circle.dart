@@ -1,6 +1,7 @@
 //Model to define a Circle of members, including all tasks, settings, etc
 import 'dart:collection';
 
+import 'package:chums/models/chore_cycle.dart';
 import 'package:chums/models/setup.dart';
 import 'package:chums/models/user.dart';
 
@@ -11,6 +12,7 @@ class Circle{
   List<User> members;
   User host;
   String name;
+//TODO: create a roomcode variable
 
   List<Item> allTasks;
   List<Item> allAnnouncements;
@@ -23,19 +25,12 @@ class Circle{
       this.members,
       this.host,
       this.name,
-      allTasks, allAnnouncements, allExpenses, allReminders,
-      /*{ //If value not specified --> follows implementation after the colon
-        List<Item>? allTasks,
-        List<Item>? allAnnouncements,
-        List<Item>? allExpenses,
-        List<Item>? allReminders,
-        Setup? settings
-      }*/):
+      allTasks, allAnnouncements, allExpenses, allReminders,):
         allTasks = allTasks ?? [],
         allAnnouncements = allAnnouncements ?? [],
         allExpenses = allExpenses ?? [],
         allReminders = allReminders ?? [],
-        settings = Setup(members);       //TODO: Determine what we want to be the default settings
+        settings = Setup(members, host, name, ChoreCycle(null, null, null, null, null), null);       //TODO: Determine what we want to be the default settings
 
 
   //Setter methods:

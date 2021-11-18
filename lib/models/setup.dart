@@ -1,23 +1,20 @@
 import 'package:chums/models/role.dart';
 import 'package:chums/models/user.dart';
 
-import 'ChoreCycle.dart';
+import 'chore_cycle.dart';
 
 class Setup{
   List<User> allMembers;
+  User host;
+  String name;
   ChoreCycle cycleSettings;
-  List<Role> allRoleTypes;
+  List<Role> allRoles;
 
-  Setup(
-      this.allMembers,
-      {
-        ChoreCycle? cycleSettings,
-        List<Role>? allRoleTypes,
-      }) :
-        cycleSettings = ChoreCycle(),          //TODO: Determine what we want to be the default settings
-        allRoleTypes = allRoleTypes ?? [];
+  Setup(this.allMembers, this.host, this.name, cycleSettings, allRoles) :
+        cycleSettings = ChoreCycle(null, null, null, null, null),
+        allRoles = allRoles ?? [];
 
   bool hasRoles() {
-    return allRoleTypes.isEmpty;
+    return allRoles.isEmpty;
   }
 }

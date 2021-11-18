@@ -9,7 +9,32 @@ import '../../models/item.dart';
 import '../../models/user.dart';
 import '../../constants.dart' as Constants;
 
+/*
+- Display's all data about a Circle's setup
+  Notes to self to include:
+    Setup:
+      - Host:
+      - # of members, who are members
+      - Circle Code:
+      - Circle Name
+      - Roles: how many, what are they, what are their tasks, who's assigned to them
+      - ChoreCycle: ON or OFF
+        - What Roles are cycled through, which are indefinite, etc
+        -
 
+   Categories:
+   - General:
+      - host, room code, circle name, # of members+who they are
+   - Roles:
+      - enabled?, # of + tasks + who's assigned, whether chorecycle is on:
+        - ChoreCycle:
+          - enabled?, interval period, random shuffle or specified?,
+   - Leave Group?
+   -
+
+
+
+ */
 class InfoPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
   InfoPage({Key? key, required this.title, required this.circle}) : super(key: key);
@@ -35,14 +60,33 @@ class _InfoPageState extends State<InfoPage> {
     //What I'm pasting in:
 
     return Scaffold(
-/*      appBar: AppBar(
-        title: Text(widget.title),
-      ),*/
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(left: 98),
+                  child: Text('Settings')),
+              Spacer(),
+              IconButton(onPressed: (){
+                print("You pushed the settings button");
+              },
+                  icon: Icon(Icons.view_headline_outlined))
+            ],
+          ),
+          backgroundColor: Color(0xFF3C99DC),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back_ios_outlined),
+            onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
+            {
+              print("hi you pushed the back button");
+            }
+          )
+      ),
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
           child: BottomAppBar(
-              color: Color(0xFF2565AE),
+              color: Color(0xFF0F5298),
               shape: const CircularNotchedRectangle(),
               child: Row(
                 children: [
@@ -128,23 +172,23 @@ class _InfoPageState extends State<InfoPage> {
                 SingleChildScrollView(
                     child: Column(
                         children: [
-                          //Child #1: Title - What are we adding?
+                          /*//Child #1: Title - What are we adding?
                           Row(
                               children: [
                                 Container(
                                   margin: EdgeInsets.only(left: 20, top: 50),
-                                  alignment: Alignment.topCenter,
+                                  alignment: Alignment.center,
                                   child: Text(
-                                    'Circle\'s Settings',
+                                    'Settings',
                                     style: TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 25,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Lato',
                                     ),
                                   ),
                                 ),
                               ]
-                          ),
+                          ),*/
 
                           //Child #3: Whole bulk of page:
                           Column(
@@ -153,24 +197,6 @@ class _InfoPageState extends State<InfoPage> {
                                 //Child #3a: Announcements - Column
                                 Column(
                                     children: [
-                                      //Announcement Label:
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            alignment: Alignment.topRight,
-                                            margin: EdgeInsets.only(right: 8, top: 25 ),
-                                            child: IconButton(
-                                                onPressed: (){
-                                                  Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_INFO)));
-                                                },
-                                                icon: Icon(Icons.add_circle_outline)
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
                                       //Announcement Data:
                                       Container(
                                           width: 370,

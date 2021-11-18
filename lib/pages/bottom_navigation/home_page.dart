@@ -13,7 +13,6 @@ import '../../constants.dart' as Constants;
 
 
 class HomePage extends StatefulWidget {
-  //const HomePage({Key? key}) : super(key: key);
   HomePage({Key? key, required this.title, required this.circle}) : super(key: key);
   final String title;
   Circle circle;
@@ -22,128 +21,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
-
-
-
-
-
-
-
-  List<Item> i1 = <Item>[];
-  List<Item> i2 = <Item>[];
-  List<Item> i3 = <Item>[];
-  List<Item> i4 = <Item>[];
-
   List<List<Item>> orderedTasks = [];
 
-
-  //List<User> test = <User>[User("Nobob", "pass", "email", "Po", "Lam")];
-  List<Item> announcements = <Item>[
-    /*Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
-    Item(2, 'Martha\'s family visiting', User("loluser", "pass", "email", "Po", "Lam"), null, DateTime(2021, 10, 11)),
-    Item(2, 'Water filter broken, we need to find another', User("heyBob", "pass", "email", "Po", "Lam"), null, null)*/
-  ];
+  List<Item> announcements = <Item>[];
 
 
   @override
   Widget build(BuildContext context) {
-    print("building home page");
-    List<Item> allTasks = widget.circle.getAllTasks();
     announcements = widget.circle.getAllAnnouncements();
 
-    orderedTasks = widget.circle.getOrderedListByDate(Constants.TASK_LIST);
-
     //TODO: Will need to fix to make all Reminders and Expenses be a Task (So yes will need to make Reminders and Expenses child of a Task class
-   /* if(!allTasks.isEmpty) {
-
-      //Assume all items should always be sorted:
-      for(int i = 0; i < allTasks.length; i++){
-        //Assume new date --> need a new row/list:
-        List<Item> newDate = <Item>[];
-        newDate.add(allTasks[i]);
-
-        DateTime dateOfItems = allTasks[i].getDate();
-        for(int j = i+1; j < allTasks.length; j++){
-          Item otherItem = allTasks[j];
-          DateTime otherDate = otherItem.getDate();
-
-          print("date = " + dateOfItems.toString() + "  otherdate = " + otherDate.toString() + " i = " + i.toString() + "  j = " + j.toString());
-          //If date is same, add this item to list, then check other items
-          if(dateOfItems.compareTo(otherDate) == 0){
-            newDate.add(otherItem);
-
-            //If we are at the end of the list, make sure to update i one last time to get out of both loops (since i has no postcondition)
-            *//*if(j == allTasks.length-1){
-              i = j;
-              break;
-            }*//*
-          }
-          else{ //otherwise, date is different, so make i jump to = j to make a new list from there
-            i = j-1;
-            break;
-          }
-        }
-
-        //Add this new list to the 2d list:
-        orderedTasks.add(newDate);
-        print("i " + i.toString());
-        *//*if(i == allTasks.length){
-          break;
-        }*//*
-      }*/
-
-
-
-
-
-
-
-
-
-
-
-      //Traverse through tasks to order them by date and put into 2d list:
-      //TODO: For now im hard coding this to get the example up:
-     /* i1.add(allTasks[0]);
-      i1.add(allTasks[1]);
-      i1.add(allTasks[2]);
-
-      i2.add(allTasks[3]);
-
-      i3.add(allTasks[4]);
-      i3.add(allTasks[5]);
-*/
-
-      /* for(int index = 0; index < allTasks.length; index++){
-      Item currTask = allTasks[index];
-      DateTime currDate = currTask.getDate();
-      List<Item> currListForDate = <Item>[currTask];
-
-      //!(dueDate.compareTo(DateTime(1999)) == 0)
-      for(int j = index+1; j < allTasks.length; j++){
-        //if(j != index){
-          Item otherTask = allTasks[j];
-          DateTime otherDate = otherTask.getDate();
-
-          //If have same date --> add to list
-          if(currDate.compareTo(otherDate) == 0){
-            currListForDate.add(otherTask);
-          }
-        //}
-      }
-      orderedTasks.add(currListForDate);
-    }*/
-
-    /*  orderedTasks = [
-        i1, i2, i3
-      ];*/
+    orderedTasks = widget.circle.getItemsByDate(Constants.TASK_LIST);
 
     return Scaffold(
-/*      appBar: AppBar(
-        title: Text(widget.title),
-      ),*/
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -248,6 +138,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
 
+
         body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -284,15 +175,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ]
                     ),
-
-                    /*//Child #2: Button to Change data to Master List
-                    Container(
-                      margin: EdgeInsets.only(top: 5, bottom: 10),
-                      child: ElevatedButton(
-                          onPressed: (){},
-                          child: Text('See House Master List')
-                      ),
-                    ),*/
 
 
                   //Child #3: Whole bulk of page:
@@ -340,6 +222,8 @@ class _HomePageState extends State<HomePage> {
                                     child:
                                         //List based on announcements
                                       ListView.builder(
+                                          primary: false,
+                                          shrinkWrap: true,
                                           itemCount: announcements.length,
                                           itemBuilder: (BuildContext context, int index){
                                             return Container(
@@ -401,6 +285,7 @@ class _HomePageState extends State<HomePage> {
                                 ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
+                                    primary: false,
                                     itemCount: orderedTasks.length,
                                     itemBuilder: (BuildContext context, int row) {
 

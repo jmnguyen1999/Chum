@@ -95,17 +95,24 @@ class Circle{
   }
 
   addReminder(Item newReminder){
+    //Insert in order of due date:
+    int correctIndex = findCorrectIndex(allReminders, newReminder, 0, allReminders.length-1);
     //TODO: error check newTask is an actual Task
-    allReminders.add(newReminder);
+    allReminders.insert(correctIndex, newReminder);
   }
   addAnnouncement(Item newAnnouncement){
+    //Insert in order of due date:
+    int correctIndex = findCorrectIndex(allAnnouncements, newAnnouncement, 0, allAnnouncements.length-1);
     //TODO: error check newTask is an actual Task
-    allAnnouncements.add(newAnnouncement);
+    allAnnouncements.insert(correctIndex, newAnnouncement);
   }
   addExpense(Item newExpense){
+    //Insert in order of due date:
+    int correctIndex = findCorrectIndex(allExpenses, newExpense, 0, allExpenses.length-1);
     //TODO: error check newTask is an actual Task
-    allExpenses.add(newExpense);
+    allExpenses.insert(correctIndex, newExpense);
   }
+
   setSettings(Setup newSetup){
     settings = newSetup;
   }
@@ -118,7 +125,7 @@ class Circle{
     host = newHost;
   }
 
-  List<List<Item>> getOrderedListByDate(String keyItemType){
+  List<List<Item>> getItemsByDate(String keyItemType){
     List<List<Item>> result = [];
 
     List<Item> listToOrder = [];
@@ -176,6 +183,8 @@ class Circle{
 
       return result;
   }
+
+
 
   //Getter methods:
   List<Item> getAllTasks(){

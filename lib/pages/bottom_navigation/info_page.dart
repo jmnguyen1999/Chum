@@ -26,7 +26,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
 
-    //expenses = widget.circle.getAllExpenses();
+    //TODO: Set up some setting data in constants.dart
     expenses.add(Item(1, '4 members joined', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 9)));
     expenses.add(Item(1, 'Roles specified: 3', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
     expenses.add(Item(1, 'Roles defaults:  1', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
@@ -74,8 +74,6 @@ class _InfoPageState extends State<InfoPage> {
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-
-
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_INFO)));
                         },
@@ -148,16 +146,6 @@ class _InfoPageState extends State<InfoPage> {
                               ]
                           ),
 
-                          /*//Child #2: Button to Change data to Master List
-                    Container(
-                      margin: EdgeInsets.only(top: 5, bottom: 10),
-                      child: ElevatedButton(
-                          onPressed: (){},
-                          child: Text('See House Master List')
-                      ),
-                    ),*/
-
-
                           //Child #3: Whole bulk of page:
                           Column(
                               children: [
@@ -194,6 +182,8 @@ class _InfoPageState extends State<InfoPage> {
                                           child:
                                           //List based on announcements
                                           ListView.builder(
+                                              primary: false,
+                                              shrinkWrap: true,
                                               itemCount: expenses.length,
                                               itemBuilder: (BuildContext context, int index){
                                                 return Container(

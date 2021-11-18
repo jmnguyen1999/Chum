@@ -19,65 +19,16 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-
-  List<Item> i1 = <Item>[];
-  List<Item> i2 = <Item>[];
-  List<Item> i3 = <Item>[];
-  List<Item> i4 = <Item>[];
-
   List<List<Item>> orderedTasks = [];
 
   @override
   Widget build(BuildContext context) {
-
-    List<Item> allTasks = widget.circle.getAllTasks();
-
-    if(!allTasks.isEmpty) {
-      //Traverse through tasks to order them by date and put into 2d list:
-      //TODO: For now im hard coding this to get the example up:
-      i1.add(allTasks[0]);
-      i1.add(allTasks[1]);
-      i1.add(allTasks[2]);
-
-      i2.add(allTasks[3]);
-
-      i3.add(allTasks[4]);
-      i3.add(allTasks[5]);
-
-
-      /* for(int index = 0; index < allTasks.length; index++){
-      Item currTask = allTasks[index];
-      DateTime currDate = currTask.getDate();
-      List<Item> currListForDate = <Item>[currTask];
-
-      //!(dueDate.compareTo(DateTime(1999)) == 0)
-      for(int j = index+1; j < allTasks.length; j++){
-        //if(j != index){
-          Item otherTask = allTasks[j];
-          DateTime otherDate = otherTask.getDate();
-
-          //If have same date --> add to list
-          if(currDate.compareTo(otherDate) == 0){
-            currListForDate.add(otherTask);
-          }
-        //}
-      }
-      orderedTasks.add(currListForDate);
-    }*/
-
-      orderedTasks = [
-        i1, i2, i3
-      ];
-      print("Length of orderedTasks: " + orderedTasks.length.toString());
-    }
-
-
     //Everything im pasting in:
 
+    //TODO: Will need to fix to make all Reminders and Expenses be a Task (So yes will need to make Reminders and Expenses child of a Task class
+    orderedTasks = widget.circle.getItemsByDate(Constants.TASK_LIST);
+
     return Scaffold(
-/*      appBar: AppBar(
-        title: Text(widget.title),
-      ),*/
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -114,40 +65,6 @@ class _TaskPageState extends State<TaskPage> {
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-                          /*showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SimpleDialog(
-                                  title: Text('Choose an Option'),
-                                  children: <Widget>[
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 1'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 2'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 3'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 4'),
-                                    ),
-                                  ],
-                                );
-                              });*/
-
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_TASKS)));
                         },
@@ -219,21 +136,12 @@ class _TaskPageState extends State<TaskPage> {
                               ]
                           ),
 
-                          /*//Child #2: Button to Change data to Master List
-                    Container(
-                      margin: EdgeInsets.only(top: 5, bottom: 10),
-                      child: ElevatedButton(
-                          onPressed: (){},
-                          child: Text('See House Master List')
-                      ),
-                    ),*/
-
 
                           //Child #3: Whole bulk of page:
                           Column(
                               children: [
                                 ListView.builder(
-                                    scrollDirection: Axis.vertical,
+                                    primary: false,
                                     shrinkWrap: true,
                                     itemCount: orderedTasks.length,
                                     itemBuilder: (BuildContext context, int row) {

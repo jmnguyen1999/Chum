@@ -2,11 +2,18 @@ import 'models/circle.dart';
 import 'models/item.dart';
 import 'models/user.dart';
 
+//For diff pages:
 const String KEY_HOME = "home_page";
 const String KEY_TASKS = "task_page";
 const String KEY_EXPENSES = "expenses_page";
 const String KEY_INFO = "info_page";
 const String KEY_ADD = "add_page";
+
+//For diff tasks:
+const String TASK_LIST = "all tasks";
+const String EXPENSES_LIST = "all expenses";
+const String REMINDERS_LIST = "all reminders";
+const String ANNOUNCEMENTS_LIST = "all announcements";
 
 //All example data to mock me database lol:
 class Constants {
@@ -38,17 +45,30 @@ class Constants {
     List<Item> expenses = <Item>[];
     User host = User("", "", "", "", "", null);
     String circleName = "";
+    //TODO: Add more members
+    Circle circle = Circle(members, host, circleName, tasks, announcements, expenses, reminders);
 
     switch(roomCode){
       case "FWET":
       //Tasks:
-        tasks.add(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
+        /*tasks.add(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'something to do on the 9th', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 9)));
         tasks.add(Item(1, 'on 10th i like food make food', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
-        tasks.add(Item(1, 'on 10th i do something else', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
+        tasks.add(Item(1, 'on 10th i do something else', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));*/
 
+        circle.addTask(Item(1, 'on 10th i like food make food', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
+        circle.addTask(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
+        circle.addTask(Item(1, 'on 10th i do something else', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
+        circle.addTask(Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
+        circle.addTask(Item(1, 'something to do on the 9th', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 9)));
+        circle.addTask(Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
+
+        tasks = circle.getAllTasks();
+        for(Item task in tasks){
+          print(task.getDescription());
+        }
 
         //Announcements:
         announcements.add(Item(2, 'Meeting for HW #2, CS 4310', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 10, 11)));
@@ -64,7 +84,7 @@ class Constants {
         expenses.add(Item(4, 'white t-shirts for work, 5-pack+', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 9)));
 
         //TODO: Add more members
-        return Circle(members, host, circleName, tasks, announcements, expenses, reminders);
+        return circle;
       /*case "LOKI":
         break;
       case "PNTO":

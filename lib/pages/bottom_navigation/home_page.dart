@@ -23,6 +23,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
+
+
+
+
+
+
+
   List<Item> i1 = <Item>[];
   List<Item> i2 = <Item>[];
   List<Item> i3 = <Item>[];
@@ -41,21 +49,64 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("building home page");
     List<Item> allTasks = widget.circle.getAllTasks();
     announcements = widget.circle.getAllAnnouncements();
 
-    if(!allTasks.isEmpty) {
-      List<Item> reminders = widget.circle.getAllReminders();
-      List<Item> expenses = widget.circle.getAllExpenses();
-      print("In home page, received these firsts: task = " +
-          allTasks[0].getDescription() + "   announcement= " + announcements[0]
-          .getDescription()); /*+ "   reminder = " + reminders[0].getDescription()+ "   expenses= " + expenses[0].getDescription());*/
+    orderedTasks = widget.circle.getOrderedListByDate(Constants.TASK_LIST);
 
-      Item i = announcements[0];
+    //TODO: Will need to fix to make all Reminders and Expenses be a Task (So yes will need to make Reminders and Expenses child of a Task class
+   /* if(!allTasks.isEmpty) {
+
+      //Assume all items should always be sorted:
+      for(int i = 0; i < allTasks.length; i++){
+        //Assume new date --> need a new row/list:
+        List<Item> newDate = <Item>[];
+        newDate.add(allTasks[i]);
+
+        DateTime dateOfItems = allTasks[i].getDate();
+        for(int j = i+1; j < allTasks.length; j++){
+          Item otherItem = allTasks[j];
+          DateTime otherDate = otherItem.getDate();
+
+          print("date = " + dateOfItems.toString() + "  otherdate = " + otherDate.toString() + " i = " + i.toString() + "  j = " + j.toString());
+          //If date is same, add this item to list, then check other items
+          if(dateOfItems.compareTo(otherDate) == 0){
+            newDate.add(otherItem);
+
+            //If we are at the end of the list, make sure to update i one last time to get out of both loops (since i has no postcondition)
+            *//*if(j == allTasks.length-1){
+              i = j;
+              break;
+            }*//*
+          }
+          else{ //otherwise, date is different, so make i jump to = j to make a new list from there
+            i = j-1;
+            break;
+          }
+        }
+
+        //Add this new list to the 2d list:
+        orderedTasks.add(newDate);
+        print("i " + i.toString());
+        *//*if(i == allTasks.length){
+          break;
+        }*//*
+      }*/
+
+
+
+
+
+
+
+
+
+
 
       //Traverse through tasks to order them by date and put into 2d list:
       //TODO: For now im hard coding this to get the example up:
-      i1.add(allTasks[0]);
+     /* i1.add(allTasks[0]);
       i1.add(allTasks[1]);
       i1.add(allTasks[2]);
 
@@ -63,7 +114,7 @@ class _HomePageState extends State<HomePage> {
 
       i3.add(allTasks[4]);
       i3.add(allTasks[5]);
-
+*/
 
       /* for(int index = 0; index < allTasks.length; index++){
       Item currTask = allTasks[index];
@@ -85,11 +136,10 @@ class _HomePageState extends State<HomePage> {
       orderedTasks.add(currListForDate);
     }*/
 
-      orderedTasks = [
+    /*  orderedTasks = [
         i1, i2, i3
-      ];
-      print("Length of orderedTasks: " + orderedTasks.length.toString());
-    }
+      ];*/
+
     return Scaffold(
 /*      appBar: AppBar(
         title: Text(widget.title),
@@ -344,45 +394,10 @@ class _HomePageState extends State<HomePage> {
                                               )
                                             );
                                       })
-
-                                    /*Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 15),
-                                            child:
-                                              Text('HW #2 for CS 4310 due on Friday 9/14'))),
-                                        Divider(
-                                            height: 2,
-                                            thickness: 0.5,
-                                            indent:0,
-                                            endIndent:0,
-                                            color: Color(0xFFD3D3D3)
-                                        ),
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 10),
-                                            child: Text('Martha\'s family visiting on Friday 9/14'))),
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                            child: Text('Water filter broken, we need to find another'))),
-                                      ],
-                                    ),*/
                                   ),
                                 ]
                             ),
 
-
-                          //Child #3b: Today section - Container
-                            // All Tasks:
-                           /* Container(
-                                margin: EdgeInsets.only(top: 30),
-                                width: 370,
-                                //height: 200,
-                                decoration: BoxDecoration(
-                                    color: Colors.white38,
-                                    borderRadius: BorderRadius.all(Radius.circular(10))
-                                ),
-                              child:*/
                                 ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
@@ -467,364 +482,6 @@ class _HomePageState extends State<HomePage> {
                                                   )
                                               ]));
                                     })
-
-
-
-
-
-                                        //Day Data:
-                                        /*Container(
-                                          width: 350,
-                                          height: 130,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFCDDEE8),
-                                            borderRadius: BorderRadius.all(Radius.circular(20))
-                                          ),
-
-                                          child: ListView.builder(
-                                            itemCount: orderedTasks[row].length,
-                                            itemBuilder: (BuildContext context, int col){
-                                              return Container(
-                                                margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      margin: EdgeInsets.only(right: 10),
-                                                      width: 30,
-                                                      height: 30,
-                                                      child: CircleAvatar(
-                                                        backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
-                                                      ),
-                                                    ),
-
-                                                    Text(
-                                                      '${orderedTasks[row][col].getDescription()}',
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.grey
-                                                      ),
-                                                    )
-                                                  ]
-                                                )
-                                                    );
-                                            }
-                                            )
-                                            )*/
-                                           /* ])
-                                            );
-                                  }
-    ),*/
-                           // )
-
-
-
-                                         /* Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(child: Container(
-                                              margin: EdgeInsets.only(left: 20, top: 15),
-                                              child: Text('- Buy tissue paper by @11:59pm'))),
-                                            Expanded(child: Container(
-                                              margin: EdgeInsets.only(left: 20, top: 10),
-                                              child: Text('- Take out trash by @7pm'))),
-                                            Expanded(child: Container(
-                                              margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                              child: Text('...'))),
-                                          ],
-                                        ),
-                                      ),*/
-
-
-                            /*Container(
-                                margin: EdgeInsets.only(top: 30),  //margin to separate from top
-                                child: Column(
-                                    children: [
-
-                                      //Today label:
-                                      Container(
-                                        alignment: Alignment.topLeft,
-                                        margin: EdgeInsets.only(left: 20),
-                                        child: Text('Today, Friday 9/8:',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey
-                                            )
-                                        ),
-                                      ),
-
-                                      //Today data:
-                                      Container(
-                                        width: 350,
-                                        height: 130,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xFFCDDEE8),
-                                            borderRadius: BorderRadius.all(Radius.circular(20))
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(child: Container(
-                                                margin: EdgeInsets.only(left: 20, top: 15),
-                                                child: Text('- Buy tissue paper by @11:59pm'))),
-                                            Expanded(child: Container(
-                                                margin: EdgeInsets.only(left: 20, top: 10),
-                                                child: Text('- Take out trash by @7pm'))),
-                                            Expanded(child: Container(
-                                                margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                                child: Text('...'))),
-                                          ],
-                                        ),
-                                      ),
-
-
-                                      //Tomorrow section:
-                                      Container(
-                                        margin: EdgeInsets.only(top: 30),
-                                        child: Column(
-                                            children: [
-
-                                              //Tomorrow Label:
-                                              Container(
-                                                alignment: Alignment.topLeft,
-                                                margin: EdgeInsets.only(left: 20),
-                                                child:
-                                                Text('Tomorrow, Wednesday 9/8:',
-                                                    style: TextStyle(
-                                                        fontSize: 18,
-                                                        color: Colors.grey
-                                                    )
-                                                ),
-                                              ),
-
-                                              //Tomorrow Data:
-                                              Container(
-                                                width: 350,
-                                                height: 1000,
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xFFCDDEE8),
-                                                    borderRadius: BorderRadius.all(Radius.circular(20))
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                        child:
-                                                        Container(
-                                                            margin: EdgeInsets.only(left: 20, top: 15),
-                                                            child:
-                                                              Text('- Buy tissue paper by @11:59pm')
-                                                        )
-                                                    ),
-
-                                                    Expanded(child:
-                                                      Container(
-                                                          margin: EdgeInsets.only(left: 20, top: 10),
-                                                          child:
-                                                          Text('- Take out trash by @7pm')
-                                                      )
-                                                    ),
-
-                                                    Expanded(child:
-                                                      Container(
-                                                          margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                                          child:
-                                                            Text('...')
-
-                                                      )
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-
-                                            ]
-                                        ),
-                                      )
-                                      //End of Tomorrow Section
-
-
-                                    ]//TODO: The issue = Tomorrow section is still in the Today section?
-                                )
-                            )
-                                    //End of Today Section
-
-                          ] //End of List of Children for all data on screen
-                    )
-                ], //End of all Children for entire screen, including app bar
-              )
-            )*/
-
-
-
-            /*Expanded(
-              flex: 10,
-                child: Container(
-                  color: Color(0xFFC9E3DA),
-                  width: 400,
-                  alignment: Alignment.center,
-                  child: Text(
-                        'All Your Things',
-                        style: TextStyle(
-                            fontSize: 20,
-                          *//*color: Colors.black,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.red,
-                          decorationStyle: TextDecorationStyle.wavy,*//*
-                          fontFamily: 'RaleWay',
-                        )
-
-                      ),
-                ),
-
-            ),
-            Expanded(
-              flex: 10,
-              child: Container(
-                margin: EdgeInsets.only(top: 5, bottom: 10),
-                child: ElevatedButton(
-                    onPressed: (){},
-                    child: Text('See House Master List')
-                ),
-              ),
-            ),
-
-            //Announcements:
-            Expanded(
-              flex: 80,
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text('Announcements',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
-                      ),
-
-                      Container(
-                        width: 350,
-                        height: 130,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFCDDEE8),
-                            borderRadius: BorderRadius.all(Radius.circular(20))
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 15),
-                                child: Text('- HW #2 for CS 4310 due on Friday 9/14'))),
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 10),
-                                child: Text('- Martha\'s family visiting on Friday 9/14'))),
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                child: Text('- water filter broken, we need to find another'))),
-                          ],
-                        ),
-                      ),
-                    ]
-                ),
-
-                //Today section:
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left: 20),
-                        child: Text('Today, Friday 9/8:',
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold
-                            )
-                        ),
-                      ),
-
-                      Container(
-                        width: 350,
-                        height: 130,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFCDDEE8),
-                            borderRadius: BorderRadius.all(Radius.circular(20))
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 15),
-                                child: Text('- Buy tissue paper by @11:59pm'))),
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 10),
-                                child: Text('- Take out trash by @7pm'))),
-                            Expanded(child: Container(
-                                margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                child: Text('...'))),
-                          ],
-                        ),
-                      ),
-
-
-                          //Tomorrow section:
-                          Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(left: 20),
-                                child:
-                                  Text('Today, Wednesday 9/8:',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold
-                                    )
-                                  ),
-                              ),
-
-                          Container(
-                            width: 350,
-                            height: 130,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFCDDEE8),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                              child:
-                                Container(
-                                  margin: EdgeInsets.only(left: 20, top: 15),
-                                  child: Text('- Buy tissue paper by @11:59pm'))
-                                ),
-
-                                Expanded(child: Container(
-                                  margin: EdgeInsets.only(left: 20, top: 10),
-                                  child: Text('- Take out trash by @7pm'))
-                                ),
-
-                                Expanded(child: Container(
-                                  margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                  child: Text('...'))
-                                ),
-                            ],
-                            ),
-                            ),
-                    ]
-                  ),
-                )
-            ]
-          )
-      )
-    ]
-    )
-    )*/
   ]
     )
           ]

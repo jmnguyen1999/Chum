@@ -26,16 +26,49 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
 
+  String dropdownValue = 'One';
+  var items =  ['Apple','Banana','Grapes','Orange','watermelon','Pineapple'];
+
+  List<String> _locations = ['A', 'B', 'C', 'D']; // Option 2
+  String _selectedLocation = ""; // Option 2
+
   //Values to store to create new Item:
-  String assignedChum = 'None';
+  String assignedChum = "";
   String taskType = 'Task';
-  String assignedRole = 'Role #1';
+  String assignedRole = "";
   String description = "";
 
   TextEditingController descriptionController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
+  List<String> chumNames = <String>['One', 'Two', 'Free', 'Four'];
+  List<String> roles = <String>[];
 
+  @override
+  void initState() {
+    //Initialize chumNames and roles
+    chumNames = widget.circle.getMemberNames();
+    chumNames.insert(0, "None");
+
+    print("chumNames: ");
+    for(String name in chumNames){
+      print(name);
+    }
+
+    roles.insert(0, "None");
+    for(int i = 1; i <= widget.circle.getRoles().length; i++){
+      roles.insert(i, "Role #"+ i.toString());
+    }
+
+    print("roles: ");
+    for(String name in roles){
+      print(name);
+    }
+
+    assignedChum = chumNames[0];
+    assignedRole = roles[0];
+    super.initState();
+  }
 
   //Purpose: Allow user to select a date, save selectedDate as global variable
   Future<void> _selectDate(BuildContext context) async {
@@ -114,15 +147,59 @@ class _AddPageState extends State<AddPage> {
     }
   }
 
+  onChangeDropdownItem(String? value) {
+    setState(() {
+      assignedChum = value!;
+    });
+  }
+
+
   //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      /*appBar: AppBar(
-        title: Text(widget.title),
-      ),*/
+    /*//Initialize chumNames and roles
+    chumNames = widget.circle.getMemberNames();
+    chumNames.insert(0, "None");
 
+    print("chumNames: ");
+    for(String name in chumNames){
+      print(name);
+    }
+
+    roles.insert(0, "N/a");
+    for(int i = 1; i <= widget.circle.getRoles().length; i++){
+      roles.insert(i, "Role #"+ i.toString());
+    }
+
+    print("roles: ");
+    for(String name in roles){
+      print(name);
+    }*/
+    return Scaffold(
+
+        appBar: AppBar(
+            title: Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 72),
+                    child: Text('Add New Item')),
+                Spacer(),
+                IconButton(onPressed: (){
+                  print("You pushed the settings button");
+                },
+                    icon: Icon(Icons.view_headline_outlined))
+              ],
+            ),
+            backgroundColor: Color(0xFF3C99DC),
+            leading: new IconButton(
+                icon: new Icon(Icons.arrow_back_ios_outlined),
+                onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
+                {
+                  print("hi you pushed the back button");
+                }
+            )
+        ),
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -195,12 +272,28 @@ class _AddPageState extends State<AddPage> {
           ),
         ),
 
-      body:
-        Center(
-          child:
+      body:Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFD5F3FE),
+                  //Color(0xFF66D3FA),
+                  Color(0xFF3C99DC),
+                  Color(0xFF2565AE)
+                  //Color(0xFF2565AE),
+                ],
+              )
+          ),
+          child: Column(
+              children:[
           SingleChildScrollView(
             child: Column(
                 children: [
+
+                  /*
                   //Title:
                   Text("Add new item",
                     textAlign: TextAlign.left,
@@ -209,43 +302,49 @@ class _AddPageState extends State<AddPage> {
                       fontWeight: FontWeight.bold,
                     )
                   ),
+*/
+
 
                   //Question 1: What item we adding?
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 15, right: 60),
+                        margin: EdgeInsets.only(top:15, left: 15, right: 60),
                           child:
                             Text("Item Type",
                               textAlign: TextAlign.left,
                               style: TextStyle(
+                                fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               )
                             )
                       ),
 
-                      DropdownButton<String>(
-                        value: taskType,
-                        icon: const Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
+                      Container(
+                        margin: EdgeInsets.only(top:15, left: 15, right: 60),
+                        child:DropdownButton<String>(
+                          value: taskType,
+                          icon: const Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: Color(0xFF0F5298)),
+                          underline: Container(
+                            height: 2,
+                            color: Color(0xFF2565AE),
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              taskType = newValue!;
+                            });
+                          },
+                          items: <String>['Task', 'Announcement', 'Reminder', 'Expense']
+                              .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                          }).toList(),
                         ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            taskType = newValue!;
-                          });
-                        },
-                        items: <String>['Task', 'Announcement', 'Reminder', 'Expense']
-                            .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                        }).toList(),
                       ),
                     ],
                   ),
@@ -258,6 +357,7 @@ class _AddPageState extends State<AddPage> {
                     child: Text("$taskType Description",
                         textAlign: TextAlign.left,
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontSize: 16,
                         )
                     ),
@@ -267,10 +367,11 @@ class _AddPageState extends State<AddPage> {
                     height: 30,
                     child: TextField(
                       controller: descriptionController,
+                     // cursorColor: Color(0xFF0F5298),
                       obscureText: false,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
+                            borderRadius: BorderRadius.circular(10),
                         ),
                         labelText: 'Enter here...',
                       ),
@@ -289,6 +390,7 @@ class _AddPageState extends State<AddPage> {
                           child: Text("Due Date:  ",
                               style: TextStyle(
                                 fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               )
                           ),
                         ),
@@ -307,13 +409,15 @@ class _AddPageState extends State<AddPage> {
                           width: 150,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)
+                              border: Border.all(color: Color(0xFF3C99DC)),
+                              borderRadius: BorderRadius.all(Radius.circular(15))
                           ),
                           child: Text('$selectedDate',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.grey,
+                                  fontWeight: FontWeight.bold,
+                                color: Color(0xFF2565AE)
                               )
                           ),
                         ),
@@ -333,6 +437,7 @@ class _AddPageState extends State<AddPage> {
                           child: Text("Assign to a Chum?  ",
                               style: TextStyle(
                                 fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               )
                           ),
                         ),
@@ -340,23 +445,22 @@ class _AddPageState extends State<AddPage> {
                         //Dropdown of possible chums:
                         Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: DropdownButton<String>(
+                          child: DropdownButton(
                             value: assignedChum,
                             icon: const Icon(Icons.arrow_downward),
                             iconSize: 24,
                             elevation: 16,
-                            style: const TextStyle(color: Colors.deepPurple),
+                            style: const TextStyle(color: Color(0xFF0F5298)),
                             underline: Container(
                               height: 2,
-                              color: Colors.deepPurpleAccent,
+                              color: Color(0xFF2565AE),
                             ),
-                            onChanged: (newValue) {
+                            onChanged: onChangeDropdownItem,/*(String? newChum) {
                               setState(() {
-                                assignedChum = newValue!;
+                                assignedChum = newChum!;
                               });
-                            },
-                            items: <String>['Doug', 'Barry', 'Brooke', 'Lori', 'None']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            },*/
+                            items: chumNames.map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Text(value),
@@ -380,6 +484,7 @@ class _AddPageState extends State<AddPage> {
                           child: Text("Assign to a Role?  ",
                               style: TextStyle(
                                 fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               )
                           ),
                         ),
@@ -392,18 +497,17 @@ class _AddPageState extends State<AddPage> {
                             icon: const Icon(Icons.arrow_downward),
                             iconSize: 24,
                             elevation: 16,
-                            style: const TextStyle(color: Colors.deepPurple),
+                            style: const TextStyle(color: Color(0xFF0F5298)),
                             underline: Container(
                               height: 2,
-                              color: Colors.deepPurpleAccent,
+                              color: Color(0xFF2565AE),
                             ),
-                            onChanged: (newValue) {
+                            onChanged: (newRole) {
                               setState(() {
-                                assignedRole = newValue!;
+                                assignedRole = newRole!;
                               });
                             },
-                            items: <String>['Role #1', 'Role #2', 'Role #3']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: roles.map((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -428,8 +532,8 @@ class _AddPageState extends State<AddPage> {
                 ]
     )
         )
-    )
+    ])
         //Child #1: Title - What are we adding?
-    );
+    ));
   }
 }

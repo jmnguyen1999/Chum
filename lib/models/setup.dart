@@ -17,4 +17,7 @@ class Setup{
   bool hasRoles() {
     return allRoles.isEmpty;
   }
+  List<Role> getRoles(){
+    return allRoles;
+  }
 }

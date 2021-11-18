@@ -2,6 +2,7 @@
 import 'dart:collection';
 
 import 'package:chums/models/chore_cycle.dart';
+import 'package:chums/models/role.dart';
 import 'package:chums/models/setup.dart';
 import 'package:chums/models/user.dart';
 
@@ -182,6 +183,20 @@ class Circle{
 
 
   //Getter methods:
+  List<Role> getRoles(){
+    return settings.getRoles();
+  }
+
+  List<User> getAllMembers(){
+    return members;
+  }
+  List<String> getMemberNames(){
+    List<String> names = [];
+    for(User member in members){
+      names.add(member.getFName());
+    }
+    return names;
+  }
   List<Item> getAllTasks(){
     return allTasks;
   }

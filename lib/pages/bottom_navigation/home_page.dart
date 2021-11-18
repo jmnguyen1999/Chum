@@ -3,6 +3,7 @@ import 'package:chums/pages/bottom_navigation/task_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../edit_item.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
 import 'info_page.dart';
@@ -290,82 +291,89 @@ class _HomePageState extends State<HomePage> {
                                     itemBuilder: (BuildContext context, int row) {
 
                                       //Transparent box to capture label and data:
-                                      return Container(
-                                          margin: EdgeInsets.only(top: 15),
-                                          child: Column(
-                                              children: [
+                                      return ListTile(
+                                         // margin: EdgeInsets.only(top: 15),
+                                          onTap: (){
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (context) => EditItemPage(title: widget.title, circle: widget.circle, item: orderedTasks[row][0])));
+                                          },
+                                          title: Container(
+                                            margin: EdgeInsets.only(top: 15),
+                                            child: Column(
+                                                children: [
 
-                                                //1.) Day Label:
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      alignment: Alignment.topLeft,
-                                                      margin: EdgeInsets.only(
-                                                          left: 20),
-                                                      child: Text(orderedTasks[row][0].getDateString(),
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                          )
-                                                      ),
-                                                    ),
-                                                    Spacer(),
-                                                    Container(
-                                                      alignment: Alignment.topRight,
-                                                      margin: EdgeInsets.only(right: 8),
-                                                      child: IconButton(
-                                                          onPressed: (){
-                                                            Navigator.push(context, MaterialPageRoute(
-                                                                builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_HOME)));
-                                                            },
-                                                          icon: Icon(Icons.add_circle_outline)
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                //2.) Day Data:
-                                                //Transparent container since every task is in own box:
-                                                Container(
-                                                  width: 370,
-                                                  height: 60.0*(orderedTasks[row].length),
-
-                                                  child: ListView.builder(
-                                                    itemCount: orderedTasks[row].length,
-                                                    itemBuilder: (BuildContext context, int col){
-
-                                                      //What each individual task looks like:
-                                                    return Container(
-                                                      width: 370,
-                                                      height: 45,
-                                                      margin: EdgeInsets.only(top: 10),
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white38,
-                                                          borderRadius: BorderRadius.all(Radius.circular(20))
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                            margin: EdgeInsets.only(left: 15, right: 10),
-                                                            width: 30,
-                                                            height: 30,
-                                                            child: CircleAvatar(
-                                                              backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
-                                                            ),
-                                                          ),
-
-                                                          Text(
-                                                            '${orderedTasks[row][col].getDescription()}',
+                                                  //1.) Day Label:
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        alignment: Alignment.topLeft,
+                                                        margin: EdgeInsets.only(
+                                                            left: 20),
+                                                        child: Text(orderedTasks[row][0].getDateString(),
                                                             style: TextStyle(
-                                                              fontSize: 15,
+                                                              fontSize: 16,
+                                                            )
+                                                        ),
+                                                      ),
+                                                      Spacer(),
+                                                      Container(
+                                                        alignment: Alignment.topRight,
+                                                        margin: EdgeInsets.only(right: 8),
+                                                        child: IconButton(
+                                                            onPressed: (){
+                                                              Navigator.push(context, MaterialPageRoute(
+                                                                  builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_HOME)));
+                                                              },
+                                                            icon: Icon(Icons.add_circle_outline)
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  //2.) Day Data:
+                                                  //Transparent container since every task is in own box:
+                                                  Container(
+                                                    width: 370,
+                                                    height: 60.0*(orderedTasks[row].length),
+
+                                                    child: ListView.builder(
+                                                      itemCount: orderedTasks[row].length,
+                                                      itemBuilder: (BuildContext context, int col){
+
+                                                        //What each individual task looks like:
+                                                      return Container(
+                                                        width: 370,
+                                                        height: 45,
+                                                        margin: EdgeInsets.only(top: 10),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.white38,
+                                                            borderRadius: BorderRadius.all(Radius.circular(20))
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                              margin: EdgeInsets.only(left: 15, right: 10),
+                                                              width: 30,
+                                                              height: 30,
+                                                              child: CircleAvatar(
+                                                                backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
+                                                              ),
                                                             ),
-                                                          )
-                                                        ]
-                                                      )
-                                                    );
-                                                    }
-                                                  )
-                                                  )
-                                              ]));
+
+                                                            Text(
+                                                              '${orderedTasks[row][col].getDescription()}',
+                                                              style: TextStyle(
+                                                                fontSize: 15,
+                                                              ),
+                                                            )
+                                                          ]
+                                                        )
+                                                      );
+                                                      }
+                                                    )
+                                                    )
+                                                ]),
+                                          ));
                                     })
   ]
     )

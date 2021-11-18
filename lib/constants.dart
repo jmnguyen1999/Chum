@@ -8,6 +8,7 @@ const String KEY_TASKS = "task_page";
 const String KEY_EXPENSES = "expenses_page";
 const String KEY_INFO = "info_page";
 const String KEY_ADD = "add_page";
+const String KEY_EDIT_PAGE = "edit_item_page";  //todo: include this in the switch case in add_page
 
 //For diff tasks:
 const String TASK_LIST = "all tasks";

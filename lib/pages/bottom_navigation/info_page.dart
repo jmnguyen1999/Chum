@@ -167,8 +167,8 @@ class _InfoPageState extends State<InfoPage> {
                   ],
                 )
             ),
-            child: Center(
-                child:
+            child: Column(
+                children:[
                 SingleChildScrollView(
                     child: Column(
                         children: [
@@ -189,6 +189,165 @@ class _InfoPageState extends State<InfoPage> {
                                 ),
                               ]
                           ),*/
+
+                          //For General Option:
+                          Container(
+                          margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+                          child: Column(
+                              children: [
+                                Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 20, bottom:11),
+                                        width: 30,
+                                        height: 30,
+                                        child: IconButton(
+                                          icon: Icon(Icons.account_balance),
+                                          onPressed: () {  },
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            //margin: EdgeInsets.only(bottom: 5),
+                                            child: Text(
+                                                'General',
+                                                style: TextStyle(
+                                                    fontSize:16
+                                                )
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Spacer(),
+                                      IconButton(
+                                          onPressed: (){},
+                                          icon: Icon(Icons.arrow_forward_ios)
+                                      )
+                                    ]
+                                ),
+
+                                Container(
+                                  child: Divider(
+                                      height: 2,
+                                      thickness: 0.5,
+                                      indent:0,
+                                      endIndent:0,
+                                      color: Color(0xFF3C99DC)
+                                  ),
+                                )
+                              ]
+                          )
+                      ),
+
+
+                          //For Roles option:
+                          Container(
+                              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+                              child: Column(
+                                  children: [
+                                    Row(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 20, bottom: 11, ),
+                                            width: 30,
+                                            height: 30,
+                                            child:  IconButton(
+                                              icon: Icon(Icons.group),
+                                              onPressed: () {  },
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                //margin: EdgeInsets.only(bottom: 5),
+                                                child: Text(
+                                                    'Roles',
+                                                    style: TextStyle(
+                                                        fontSize:16
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Spacer(),
+                                          IconButton(
+                                              onPressed: (){},
+                                              icon: Icon(Icons.arrow_forward_ios)
+                                          )
+                                        ]
+                                    ),
+
+                                    Container(
+                                      child: Divider(
+                                          height: 2,
+                                          thickness: 0.5,
+                                          indent:0,
+                                          endIndent:0,
+                                          color: Color(0xFF3C99DC)
+                                      ),
+                                    )
+                                  ]
+                              )
+                          ),
+
+                          //For Leave Group Option:
+                          Container(
+                              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+                              child: Column(
+                                  children: [
+                                    Row(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 10),
+                                            width: 30,
+                                            height: 30,
+                                            child: CircleAvatar(
+                                              backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                //margin: EdgeInsets.only(bottom: 5),
+                                                child: Text(
+                                                    'Leave Group?',
+                                                    style: TextStyle(
+                                                        fontSize:16,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.red
+                                                    )
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+
+                                    Container(
+                                      child: Divider(
+                                          height: 2,
+                                          thickness: 0.5,
+                                          indent:0,
+                                          endIndent:0,
+                                          color: Color(0xFF3C99DC)
+                                      ),
+                                    )
+                                  ]
+                              )
+                          ),
+
+
+
+
+/*
+
 
                           //Child #3: Whole bulk of page:
                           Column(
@@ -264,145 +423,17 @@ class _InfoPageState extends State<InfoPage> {
                                                     )
                                                 );
                                               })
-
-                                        /*Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 15),
-                                            child:
-                                              Text('HW #2 for CS 4310 due on Friday 9/14'))),
-                                        Divider(
-                                            height: 2,
-                                            thickness: 0.5,
-                                            indent:0,
-                                            endIndent:0,
-                                            color: Color(0xFFD3D3D3)
-                                        ),
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 10),
-                                            child: Text('Martha\'s family visiting on Friday 9/14'))),
-                                        Expanded(child: Container(
-                                            margin: EdgeInsets.only(left: 20, top: 10, bottom: 15),
-                                            child: Text('Water filter broken, we need to find another'))),
-                                      ],
-                                    ),*/
                                       ),
                                     ]
                                 ),
 
 
-                                //Child #3b: Today section - Container
-                                // All Tasks:
-                                /* Container(
-                                margin: EdgeInsets.only(top: 30),
-                                width: 370,
-                                //height: 200,
-                                decoration: BoxDecoration(
-                                    color: Colors.white38,
-                                    borderRadius: BorderRadius.all(Radius.circular(10))
-                                ),
-                              child:*/
-
-                                //What I'm commenting out additionally ------------------------------------------------------------------------------------------------------
-                                /*      ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: orderedTasks.length,
-                                    itemBuilder: (BuildContext context, int row) {
-
-                                      //Transparent box to capture label and data:
-                                      return Container(
-                                          margin: EdgeInsets.only(top: 15),
-                                          child: Column(
-                                              children: [
-
-                                                //1.) Day Label:
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      alignment: Alignment.topLeft,
-                                                      margin: EdgeInsets.only(
-                                                          left: 20),
-                                                      child: Text(orderedTasks[row][0].getDateString(),
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                          )
-                                                      ),
-                                                    ),
-                                                    Spacer(),
-                                                    Container(
-                                                      alignment: Alignment.topRight,
-                                                      margin: EdgeInsets.only(right: 8),
-                                                      child: IconButton(
-                                                          onPressed: (){
-                                                            Navigator.push(context, MaterialPageRoute(
-                                                                builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
-                                                          },
-                                                          icon: Icon(Icons.add_circle_outline)
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                //2.) Day Data:
-                                                //Transparent container since every task is in own box:
-                                                Container(
-                                                    width: 370,
-                                                    height: 60.0*(orderedTasks[row].length),
-
-                                                    child: ListView.builder(
-                                                        itemCount: orderedTasks[row].length,
-                                                        itemBuilder: (BuildContext context, int col){
-
-                                                          //What each individual task looks like:
-                                                          return Container(
-                                                              width: 370,
-                                                              height: 45,
-                                                              margin: EdgeInsets.only(top: 10),
-                                                              decoration: BoxDecoration(
-                                                                  color: Colors.white38,
-                                                                  borderRadius: BorderRadius.all(Radius.circular(20))
-                                                              ),
-                                                              child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      margin: EdgeInsets.only(left: 15, right: 10),
-                                                                      width: 30,
-                                                                      height: 30,
-                                                                      child: CircleAvatar(
-                                                                        backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
-                                                                      ),
-                                                                    ),
-
-                                                                    Text(
-                                                                      '${orderedTasks[row][col].getDescription()}',
-                                                                      style: TextStyle(
-                                                                        fontSize: 15,
-                                                                      ),
-                                                                    )
-                                                                  ]
-                                                              )
-                                                          );
-                                                        }
-                                                    )
-                                                )
-                                              ]));
-                                    })   */
-
-
-
-
-
-                                //End of additional commented out
-
-
                               ]
-                          )
+                          ) */
                         ]
                     )
                 )
-            )));
+            ])));
   }
 }
 

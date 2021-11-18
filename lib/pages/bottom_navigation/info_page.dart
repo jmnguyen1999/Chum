@@ -1,12 +1,15 @@
-import 'package:chums/task_page.dart';
+import 'package:chums/pages/bottom_navigation/task_page.dart';
 import 'package:flutter/material.dart';
 
 import 'add_page.dart';
 import 'expenses_page.dart';
 import 'home_page.dart';
-import 'models/circle.dart';
-import 'models/item.dart';
-import 'models/user.dart';
+import '../../models/circle.dart';
+import '../../models/item.dart';
+import '../../models/user.dart';
+import '../../constants.dart' as Constants;
+
+
 class InfoPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
   InfoPage({Key? key, required this.title, required this.circle}) : super(key: key);
@@ -50,7 +53,7 @@ class _InfoPageState extends State<InfoPage> {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
                         },
-                        icon: Icon(Icons.home_filled, color: Colors.white)
+                        icon: Icon(Icons.home, color: Colors.white)
                     ),
                   ),
 
@@ -74,7 +77,7 @@ class _InfoPageState extends State<InfoPage> {
 
 
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_INFO)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -172,7 +175,7 @@ class _InfoPageState extends State<InfoPage> {
                                             child: IconButton(
                                                 onPressed: (){
                                                   Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_INFO)));
                                                 },
                                                 icon: Icon(Icons.add_circle_outline)
                                             ),

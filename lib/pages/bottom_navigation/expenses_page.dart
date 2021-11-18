@@ -1,11 +1,14 @@
-import 'package:chums/task_page.dart';
+import 'package:chums/pages/bottom_navigation/task_page.dart';
 import 'package:flutter/material.dart';
 
 import 'add_page.dart';
 import 'home_page.dart';
 import 'info_page.dart';
-import 'models/circle.dart';
-import 'models/item.dart';
+import '../../models/circle.dart';
+import '../../models/item.dart';
+import '../../constants.dart' as Constants;
+
+
 class ExpensesPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
   ExpensesPage({Key? key, required this.title, required this.circle}) : super(key: key);
@@ -68,7 +71,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_EXPENSES,)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -165,7 +168,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                             child: IconButton(
                                                 onPressed: (){
                                                   Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_EXPENSES,)));
                                                 },
                                                 icon: Icon(Icons.add_circle_outline)
                                             ),

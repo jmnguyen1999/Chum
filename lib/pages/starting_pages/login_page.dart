@@ -1,10 +1,9 @@
 
-import 'package:chums/create_account_page.dart';
-import 'package:chums/pages/user_home.dart';
+import 'package:chums/pages/starting_pages/create_account_page.dart';
+import 'package:chums/pages/starting_pages/user_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'next_page.dart';
+import '../bottom_navigation/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,33 +37,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      print("The counter has been increased.");
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MySecondPage(title: 'Page #2'))
-    );
-  }
 
   logIn(BuildContext context){
     String username = usernameController.text;
     String pass = passController.text;
 
-    int exampleCase = -1;
-    if(username == "jmnguyen"){
-      exampleCase = 1;
-    }
-    else{
-      exampleCase = 2;
-    }
-
     print("login page sending username: " + username);
-    print("login page sending exampleCase: " + exampleCase.toString());
     Navigator.push(context, MaterialPageRoute(
-        builder: (context) => UserHomePage(title: widget.title, whichUserSignIn: exampleCase,)));
+        builder: (context) => UserHomePage(title: widget.title, usernameSignedIn: usernameController.text,)));
   }
   @override
   Widget build(BuildContext context) {

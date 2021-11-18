@@ -1,23 +1,32 @@
-import 'package:chums/task_page.dart';
+import 'package:chums/add_dialog.dart';
+import 'package:chums/pages/bottom_navigation/task_page.dart';
 import 'package:flutter/material.dart';
 
 import 'expenses_page.dart';
 import 'home_page.dart';
 import 'info_page.dart';
-import 'models/circle.dart';
-import 'models/item.dart';
-import 'models/user.dart';
+import '../../models/circle.dart';
+import '../../models/item.dart';
+import '../../models/user.dart';
+import '../../constants.dart' as Constants;
+
+//Purpose:  Given the Circle, we have access to all Tasks, Announcements, Reminders, and Expenses. We will update this Circle object and send it back to whoever called this page (us)
 class AddPage extends StatefulWidget {
+
   //const HomePage({Key? key}) : super(key: key);
-  AddPage({Key? key, required this.title, required this.circle}) : super(key: key);
+  AddPage({Key? key, required this.title, required this.circle, required this.page_from}) : super(key: key);
   final String title;
+  final String page_from;
   Circle circle;
+
+
   @override
   _AddPageState createState() => _AddPageState();
 }
 
 class _AddPageState extends State<AddPage> {
 
+  //Values to store to create new Item:
   String assignedChum = 'None';
   String taskType = 'Task';
   String assignedRole = 'Role #1';
@@ -76,13 +85,39 @@ class _AddPageState extends State<AddPage> {
     Item newItem = Item(type, descriptionController.text, authorLol, assignedMembers, selectedDate);
     widget.circle.addItem(newItem);
 
-    //2.) Go back to the page came from passing along the new task TODO: this obvi doesn't work because it wouldn't update any task list if we came from a page that doesn't have a task list.
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => HomePage(title: widget.title, circle: widget.circle,)));
+    //2.) Go back to the page came from passing along the new task
+    //Should prob not put this here buut you know - Make sure page_from is valid page --> go to that page with updated list.
+    switch(widget.page_from){
+      case Constants.KEY_HOME:
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => HomePage(title: widget.title, circle: widget.circle,)));
+        break;
+      case Constants.KEY_TASKS:
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => TaskPage(title: widget.title, circle: widget.circle,)));
+        break;
+      case Constants.KEY_EXPENSES:
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle,)));
+        break;
+      case Constants.KEY_INFO:
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => InfoPage(title: widget.title, circle: widget.circle,)));
+        break;
+      case Constants.KEY_ADD:
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: widget.page_from)));
+        break;
+      default:
+        print("add_page:  page_from was not valid, so did not navigate back from anywhere");
+        break;
+    }
   }
 
+  //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       /*appBar: AppBar(
         title: Text(widget.title),
@@ -127,7 +162,7 @@ class _AddPageState extends State<AddPage> {
 
 
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: widget.page_from,)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),

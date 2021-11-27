@@ -157,27 +157,7 @@ class _AddPageState extends State<AddPage> {
   //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
-
-    /*//Initialize chumNames and roles
-    chumNames = widget.circle.getMemberNames();
-    chumNames.insert(0, "None");
-
-    print("chumNames: ");
-    for(String name in chumNames){
-      print(name);
-    }
-
-    roles.insert(0, "N/a");
-    for(int i = 1; i <= widget.circle.getRoles().length; i++){
-      roles.insert(i, "Role #"+ i.toString());
-    }
-
-    print("roles: ");
-    for(String name in roles){
-      print(name);
-    }*/
     return Scaffold(
-
         appBar: AppBar(
             title: Row(
               children: [
@@ -292,18 +272,6 @@ class _AddPageState extends State<AddPage> {
           SingleChildScrollView(
             child: Column(
                 children: [
-
-                  /*
-                  //Title:
-                  Text("Add new item",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    )
-                  ),
-*/
-
 
                   //Question 1: What item we adding?
                   Row(

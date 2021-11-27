@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                                          // margin: EdgeInsets.only(top: 15),
                                           onTap: (){
                                             Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => EditItemPage(title: widget.title, circle: widget.circle, item: orderedTasks[row][0])));
+                                                builder: (context) => EditItemPage(title: widget.title, circle: widget.circle, item: orderedTasks[row][0], page_from: Constants.KEY_HOME)));
                                           },
                                           title: Container(
                                             margin: EdgeInsets.only(top: 15),

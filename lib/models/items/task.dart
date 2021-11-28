@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
+
 class Task{
 
   int id;
   String description;
   DateTime dueDate;
+  int position;
 
-  Task({required this.id, required this.description, required this.dueDate});
+  Task({required this.id, required this.description, required this.dueDate, position}):
+      position = position ?? -1;
 
   //to be used when inserting a row in the table
   Map<String, dynamic> toMapWithoutId() {
@@ -36,31 +40,30 @@ class Task{
         //Assume new date --> need a new row/list:
         List<Task> newDate = <Task>[];
         newDate.add(listTasks[i]);
-        DateTime dateOfItems = listTasks[i].getDate();
+        String dateOfItems = listTasks[i].getDateString();
 
         //Check every other item's date + see if need to add:
         for (int j = i + 1; j < listTasks.length; j++) {
           Task otherItem = listTasks[j];
-          DateTime otherDate = otherItem.getDate();
-
-          print("date = " + dateOfItems.toString() + "  otherdate = " +
-              otherDate.toString() + " i = " + i.toString() + "  j = " +
-              j.toString());
+          i = j-1;
           //If date is same, add this item to list, then check other items
-          if (dateOfItems.compareTo(otherDate) == 0) {
+          if (dateOfItems == otherItem.getDateString()){//(dateOfItems.compareTo(otherDate) == 0) {
             newDate.add(otherItem);
+            //If the last one item was a copy, we can skip to the end of the list since we just configured the last item anyway
+            if(i == listTasks.length-2){
+              i = listTasks.length;
+            }
+            //i = j - 1;
           }
           else { //otherwise, date is different, so make i jump to = j to make a new list from there
-            i = j - 1;
+            //i = j - 1;
             break;
           }
         }
-
         //Add this new list to the 2d list:
         result.add(newDate);
       }
     }
-
     return result;
   }
 
@@ -79,7 +82,7 @@ class Task{
     if(!hasDueDate()){
       return "N/A";
     }
-    return dueDate.toString();
+    return DateFormat('EEEE, MMMM d').format(dueDate);
   }
   DateTime getDate(){
     return dueDate;

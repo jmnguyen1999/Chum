@@ -22,11 +22,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
 
   void getExpenses() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllExpenses();
-    List<Expense> listExpenses = [];
-    listMap.forEach((map) => listExpenses.add(Expense.fromMap(map)));
-    List<List<Expense>> sortedExpenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).getExpensesByDate(listExpenses);
     setState(() {
-      expenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).to1DList(sortedExpenses);
+      listMap.forEach((map) => expenses.add(Expense.fromMap(map)));
       print("expenses from getExpense(): " + expenses.toString());
     });
   }

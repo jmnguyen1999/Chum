@@ -50,11 +50,8 @@ class _HomePageState extends State<HomePage> {
   }
   void getReminders() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllReminders();
-    List<Reminder> listReminders = [];
-    listMap.forEach((map) => listReminders.add(Reminder.fromMap(map)));
-    List<List<Reminder>> sortedReminders = Reminder(id:123,  description: "null", dueDate: DateTime(1999)).getRemindersByDate(listReminders);
     setState(() {
-      allReminders = Reminder(id:123,  description: "null", dueDate: DateTime(1999)).to1DList(sortedReminders);
+      listMap.forEach((map) => allReminders.add(Reminder.fromMap(map)));
       print("Reminders list from getReminders: " + allReminders.toString());
     });
   }
@@ -138,6 +135,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         Container(
+                          alignment: Alignment.topCenter,
                           margin: EdgeInsets.only(left: 20, top: 50),
                           child: Text(
                             'Hello,',
@@ -263,8 +261,17 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ]
                             ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              margin: EdgeInsets.only(left: 20, top: 15),
+                              child: Text('Tasks:',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                  )
+                              ),
+                            ),
 
-                                ListView.builder(
+                            ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     primary: false,
@@ -279,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                                                 builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedTask:allTasks[row][0])));
                                           },
                                           title: Container(
-                                            margin: EdgeInsets.only(top: 15),
+                                            margin: EdgeInsets.only(top: 5),
                                             child: Column(
                                                 children: [
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Reminder{
   int id;
@@ -32,41 +33,8 @@ class Reminder{
     dueDate: DateTime.parse(data['reminder_due_date']),
   );
 
-  List<List<Reminder>> getRemindersByDate(List<Reminder> listReminders){
-    List<List<Reminder>> result = [];
-    if(listReminders.isNotEmpty) {
-      for (int i = 0; i < listReminders.length; i++) {
-        //Assume new date --> need a new row/list:
-        List<Reminder> newDate = <Reminder>[];
-        newDate.add(listReminders[i]);
-        DateTime dateOfItems = listReminders[i].getDate();
 
-        //Check every other item's date + see if need to add:
-        for (int j = i + 1; j < listReminders.length; j++) {
-          Reminder otherItem = listReminders[j];
-          DateTime otherDate = otherItem.getDate();
-
-          print("date = " + dateOfItems.toString() + "  otherdate = " +
-              otherDate.toString() + " i = " + i.toString() + "  j = " +
-              j.toString());
-          //If date is same, add this item to list, then check other items
-          if (dateOfItems.compareTo(otherDate) == 0) {
-            newDate.add(otherItem);
-          }
-          else { //otherwise, date is different, so make i jump to = j to make a new list from there
-            i = j - 1;
-            break;
-          }
-        }
-
-        //Add this new list to the 2d list:
-        result.add(newDate);
-      }
-    }
-
-    return result;
-  }
-  List<Reminder> to1DList(List<List<Reminder>> listOfLists){
+  /*List<Reminder> to1DList(List<List<Reminder>> listOfLists){
     List<Reminder> result = [];
     for(int row = 0 ; row < listOfLists.length; row++){
       List<Reminder> currRow = listOfLists[row];
@@ -75,7 +43,7 @@ class Reminder{
       }
     }
     return result;
-  }
+  }*/
 
   //Getter methods:
   int getId(){
@@ -91,7 +59,7 @@ class Reminder{
     if(!hasDueDate()){
       return "N/A";
     }
-    return dueDate.toString();
+    return DateFormat('EEEE, MMMM d').format(dueDate);
   }
   DateTime getDate(){
     return dueDate;

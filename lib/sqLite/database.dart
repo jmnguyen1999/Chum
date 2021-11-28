@@ -85,23 +85,24 @@ class DatabaseHelper {
     Database? db = await instance.database;
     return await db!.insert(expenseTable, row);
   }
-
-
   Future<List<Map<String, dynamic>>> queryAllTasks() async {
     Database? db = await instance.database;
-    var result = await db!.query(taskTable);
+    var result = await db!.rawQuery("SELECT * FROM task_table ORDER BY task_due_date");
+    //var result = await db!.query(taskTable);
     print("Task list from database: " + result.toString());
     return result.toList();
   }
   Future<List<Map<String, dynamic>>> queryAllReminders() async {
     Database? db = await instance.database;
-    var result = await db!.query(reminderTable);
+    //var result = await db!.query(reminderTable);
+    var result = await db!.rawQuery("SELECT * FROM reminder_table ORDER BY reminder_due_date");
     print("Result list from database: " + result.toString());
     return result.toList();
   }
   Future<List<Map<String, dynamic>>> queryAllExpenses() async {
     Database? db = await instance.database;
-    var result = await db!.query(expenseTable);
+    //var result = await db!.query(expenseTable);
+    var result = await db!.rawQuery("SELECT * FROM expense_table ORDER BY expense_due_date");
     return result.toList();
   }
 

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Expense{
 
   double cost;
@@ -35,41 +37,8 @@ class Expense{
     dueDate: DateTime.parse(data['expense_due_date']),
   );
 
-  List<List<Expense>> getExpensesByDate(List<Expense> listExpenses){
-    List<List<Expense>> result = [];
-    if(listExpenses.isNotEmpty) {
-      for (int i = 0; i < listExpenses.length; i++) {
-        //Assume new date --> need a new row/list:
-        List<Expense> newDate = <Expense>[];
-        newDate.add(listExpenses[i]);
-        DateTime dateOfItems = listExpenses[i].getDate();
 
-        //Check every other item's date + see if need to add:
-        for (int j = i + 1; j < listExpenses.length; j++) {
-          Expense otherItem = listExpenses[j];
-          DateTime otherDate = otherItem.getDate();
-
-          print("date = " + dateOfItems.toString() + "  otherdate = " +
-              otherDate.toString() + " i = " + i.toString() + "  j = " +
-              j.toString());
-          //If date is same, add this item to list, then check other items
-          if (dateOfItems.compareTo(otherDate) == 0) {
-            newDate.add(otherItem);
-          }
-          else { //otherwise, date is different, so make i jump to = j to make a new list from there
-            i = j - 1;
-            break;
-          }
-        }
-
-        //Add this new list to the 2d list:
-        result.add(newDate);
-      }
-    }
-
-    return result;
-  }
-  List<Expense> to1DList(List<List<Expense>> listOfLists){
+  /*List<Expense> to1DList(List<List<Expense>> listOfLists){
     List<Expense> result = [];
     for(int row = 0 ; row < listOfLists.length; row++){
       List<Expense> currRow = listOfLists[row];
@@ -78,7 +47,7 @@ class Expense{
       }
     }
     return result;
-  }
+  }*/
 
   //Getter methods:
   int getId(){
@@ -94,7 +63,7 @@ class Expense{
     if(!hasDueDate()){
       return "N/A";
     }
-    return dueDate.toString();
+    return DateFormat('EEEE, MMMM d').format(dueDate);
   }
   DateTime getDate(){
     return dueDate;

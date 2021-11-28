@@ -1,7 +1,5 @@
+/*
 
-import 'package:chums/models/circle.dart';
-import 'package:chums/models/item.dart';
-import 'package:chums/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -50,9 +48,11 @@ class _UserHomePageState extends State<UserHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     /* appBar: AppBar(
+     */
+/* appBar: AppBar(
         title: Text(widget.title),
-      ),*/
+      ),*//*
+
       backgroundColor: Color(0xFF3C99DC),
       body: Container(
       decoration: BoxDecoration(
@@ -152,4 +152,4 @@ class _UserHomePageState extends State<UserHomePage> {
     );
   }
 
-}
+}*/

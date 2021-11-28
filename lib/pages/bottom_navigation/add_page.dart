@@ -1,23 +1,31 @@
-import 'package:chums/add_dialog.dart';
-import 'package:chums/pages/bottom_navigation/task_page.dart';
+import 'package:chum/add_dialog.dart';
+import 'package:chum/models/items/expense.dart';
+import 'package:chum/models/items/reminder.dart';
+import 'package:chum/models/items/task.dart';
+import 'package:chum/sqLite/database.dart';
 import 'package:flutter/material.dart';
 
 import 'expenses_page.dart';
 import 'home_page.dart';
-import 'info_page.dart';
-import '../../models/circle.dart';
-import '../../models/item.dart';
-import '../../models/user.dart';
+
 import '../../constants.dart' as Constants;
 
 //Purpose:  Given the Circle, we have access to all Tasks, Announcements, Reminders, and Expenses. We will update this Circle object and send it back to whoever called this page (us)
 class AddPage extends StatefulWidget {
 
   //const HomePage({Key? key}) : super(key: key);
-  AddPage({Key? key, required this.title, required this.circle, required this.page_from}) : super(key: key);
+  AddPage({Key? key, required this.title, required this.page_from, required this.isEdit, selectedTask, selectedReminder,selectedExpense}) :
+        selectedTask = selectedTask ?? Task(id:-1, description:"null", dueDate: DateTime(1999)),
+        selectedReminder = selectedReminder ?? Reminder(id:-1, description:"null", dueDate: DateTime(1999)),
+        selectedExpense = selectedExpense ?? Expense(id:-1, description:"null", cost:0, dueDate: DateTime(1999)),
+        super(key: key);
+
   final String title;
   final String page_from;
-  Circle circle;
+  bool isEdit;
+  Task selectedTask;
+  Reminder selectedReminder;
+  Expense selectedExpense;
 
 
   @override
@@ -27,48 +35,16 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
 
   String dropdownValue = 'One';
-  var items =  ['Apple','Banana','Grapes','Orange','watermelon','Pineapple'];
-
-  List<String> _locations = ['A', 'B', 'C', 'D']; // Option 2
-  String _selectedLocation = ""; // Option 2
 
   //Values to store to create new Item:
-  String assignedChum = "";
   String taskType = 'Task';
-  String assignedRole = "";
   String description = "";
 
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController costController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
-  List<String> chumNames = <String>['One', 'Two', 'Free', 'Four'];
-  List<String> roles = <String>[];
 
-  @override
-  void initState() {
-    //Initialize chumNames and roles
-    chumNames = widget.circle.getMemberNames();
-    chumNames.insert(0, "None");
-
-    print("chumNames: ");
-    for(String name in chumNames){
-      print(name);
-    }
-
-    roles.insert(0, "None");
-    for(int i = 1; i <= widget.circle.getRoles().length; i++){
-      roles.insert(i, "Role #"+ i.toString());
-    }
-
-    print("roles: ");
-    for(String name in roles){
-      print(name);
-    }
-
-    assignedChum = chumNames[0];
-    assignedRole = roles[0];
-    super.initState();
-  }
 
   //Purpose: Allow user to select a date, save selectedDate as global variable
   Future<void> _selectDate(BuildContext context) async {
@@ -87,59 +63,57 @@ class _AddPageState extends State<AddPage> {
   _createItem(BuildContext context){
     print("pressed it");
     print(descriptionController.text);
-    print("circle = " + widget.circle.toString());
 
     //Get all data needed and make Item object:
-    int type;
     switch(taskType) {
       case 'Task':
-        type = 1;
-        break;
-      case 'Announcement':
-        type = 2;
+        if(widget.isEdit){
+          Task updatedTask = new Task(id:widget.selectedTask.getId(), description: descriptionController.text, dueDate: selectedDate);
+          DatabaseHelper.instance.updateTask(updatedTask.toMap());
+        }
+        else{
+          Task newTask = new Task(id:-1, description: descriptionController.text, dueDate: selectedDate);
+          DatabaseHelper.instance.insertTask(newTask.toMapWithoutId());
+        }
         break;
       case 'Reminder':
-        type = 3;
+        if(widget.isEdit){
+          Reminder updatedReminder = new Reminder(id:widget.selectedReminder.getId(), description: descriptionController.text, dueDate: selectedDate);
+          DatabaseHelper.instance.updateReminder(updatedReminder.toMap());
+        }
+        else{
+          Reminder newReminder = new Reminder(id:-1, description: descriptionController.text, dueDate: selectedDate);
+          DatabaseHelper.instance.insertReminder(newReminder.toMapWithoutId());
+        }
         break;
       case 'Expense':
-        type = 4;
+        if(widget.isEdit){
+          Expense updatedExpense = new Expense(id:widget.selectedExpense.getId(), description: descriptionController.text, cost: double.parse(costController.text), dueDate: selectedDate);
+          DatabaseHelper.instance.updateExpense(updatedExpense.toMap());
+        }
+        else{
+          Expense newExpense = new Expense(id:-1, description: descriptionController.text, cost: double.parse(costController.text), dueDate: selectedDate);
+          DatabaseHelper.instance.insertExpense(newExpense.toMapWithoutId());
+        }
         break;
       default:
-        type = -1;
         break;
     }
-    User authorLol = User("Nobob", "pass", "email", "Po", "Lam", null);
-
-    //Need to change this to actually look up the User object lol:
-    List<User> assignedMembers = <User>[];
-    if(assignedChum != "None"){
-      assignedMembers.add(User(assignedChum, "pass", "email", assignedChum, "Lam", null));
-    }
-    Item newItem = Item(type, descriptionController.text, authorLol, assignedMembers, selectedDate);
-    widget.circle.addItem(newItem);
 
     //2.) Go back to the page came from passing along the new task
     //Should prob not put this here buut you know - Make sure page_from is valid page --> go to that page with updated list.
     switch(widget.page_from){
       case Constants.KEY_HOME:
         Navigator.push(context, MaterialPageRoute(
-            builder: (context) => HomePage(title: widget.title, circle: widget.circle,)));
-        break;
-      case Constants.KEY_TASKS:
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => TaskPage(title: widget.title, circle: widget.circle,)));
+            builder: (context) => HomePage(title: widget.title)));
         break;
       case Constants.KEY_EXPENSES:
         Navigator.push(context, MaterialPageRoute(
-            builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle,)));
-        break;
-      case Constants.KEY_INFO:
-        Navigator.push(context, MaterialPageRoute(
-            builder: (context) => InfoPage(title: widget.title, circle: widget.circle,)));
+            builder: (context) => ExpensesPage(title: widget.title,)));
         break;
       case Constants.KEY_ADD:
         Navigator.push(context, MaterialPageRoute(
-            builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: widget.page_from)));
+            builder: (context) => AddPage(title: widget.title, page_from: widget.page_from, isEdit: widget.isEdit, selectedExpense: widget.selectedExpense, selectedTask: widget.selectedTask, selectedReminder: widget.selectedReminder,)));
         break;
       default:
         print("add_page:  page_from was not valid, so did not navigate back from anywhere");
@@ -147,16 +121,31 @@ class _AddPageState extends State<AddPage> {
     }
   }
 
-  onChangeDropdownItem(String? value) {
-    setState(() {
-      assignedChum = value!;
-    });
-  }
-
-
   //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
+    //If we are editing something, pre-fill values
+    if (widget.isEdit) {
+      print("yes we are editing something");
+      if(widget.selectedTask.getId() == -1){
+        descriptionController.text = widget.selectedTask.getDescription();
+        selectedDate = widget.selectedTask.getDate();
+        taskType = "Task";
+      }
+      else if(widget.selectedExpense.getId() == -1){
+        descriptionController.text = widget.selectedExpense.getDescription();
+        selectedDate = widget.selectedExpense.getDate();
+        costController.text = widget.selectedExpense.getCost().toString();
+        taskType = "Expense";
+      }
+      else{
+        descriptionController.text = widget.selectedReminder.getDescription();
+        selectedDate = widget.selectedReminder.getDate();
+        taskType = "Reminder";
+      }
+    }
+
+
     return Scaffold(
         appBar: AppBar(
             title: Row(
@@ -193,22 +182,9 @@ class _AddPageState extends State<AddPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => HomePage(title: widget.title,)));
                         },
                         icon: Icon(Icons.home_filled, color: Colors.white)
-                    ),
-                  ),
-
-                  //2.) Task Icon: TaskPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
-                          }
-                        },
-                        icon: Icon(Icons.list_alt_outlined, color: Colors.white)
                     ),
                   ),
 
@@ -216,10 +192,8 @@ class _AddPageState extends State<AddPage> {
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-
-
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: widget.page_from,)));
+                              builder: (context) => AddPage(title: widget.title, page_from: widget.page_from,isEdit: widget.isEdit, selectedExpense: widget.selectedExpense, selectedTask: widget.selectedTask, selectedReminder: widget.selectedReminder,)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -230,23 +204,11 @@ class _AddPageState extends State<AddPage> {
                     child: IconButton(
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => ExpensesPage(title: widget.title, )));
                         },
                         icon: Icon(Icons.monetization_on_outlined, color: Colors.white)
                     ),
                   ),
-
-                  //5.) Info Icon: InfoPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
-                        },
-                        icon: Icon(Icons.info_outlined, color: Colors.white)
-                    ),
-                  ),
-
                 ],
               )
           ),
@@ -305,8 +267,11 @@ class _AddPageState extends State<AddPage> {
                               taskType = newValue!;
                             });
                           },
-                          items: <String>['Task', 'Announcement', 'Reminder', 'Expense']
+                          items: <String>['Task', 'Reminder', 'Expense']
                               .map<DropdownMenuItem<String>>((String value) {
+                                if(value == "Expense"){
+                                  //TODO: Show/hide the Cost question
+                                }
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
@@ -341,6 +306,36 @@ class _AddPageState extends State<AddPage> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                         ),
+                        labelText: 'Enter here...',
+                      ),
+                    ),
+                  ),
+
+                  //Toggled if item = expense:
+          //Question: Cost?
+                  //Title:
+                  Container(
+                    alignment: Alignment.topLeft,
+                    margin: EdgeInsets.only(left: 15, top:15),
+                    child: Text("$taskType Cost",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        )
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+                    height: 30,
+                    child: TextField(
+                      controller: costController,
+                      // cursorColor: Color(0xFF0F5298),
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          ),
                         labelText: 'Enter here...',
                       ),
                     ),
@@ -393,100 +388,6 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
 
-                  //Question 4 and 5: Assign to role? Assign to person?
-                  Container(
-                    margin: EdgeInsets.only(top:15),
-                    child: Row(
-                      children: [
-                        //Assign Label to Chum:
-                        Container(
-                          margin: EdgeInsets.only(left: 20, right: 10),
-                          height: 30,
-                          child: Text("Assign to a Chum?  ",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                        ),
-
-                        //Dropdown of possible chums:
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: DropdownButton(
-                            value: assignedChum,
-                            icon: const Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: const TextStyle(color: Color(0xFF0F5298)),
-                            underline: Container(
-                              height: 2,
-                              color: Color(0xFF2565AE),
-                            ),
-                            onChanged: onChangeDropdownItem,/*(String? newChum) {
-                              setState(() {
-                                assignedChum = newChum!;
-                              });
-                            },*/
-                            items: chumNames.map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                );
-                            }).toList(),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.only(top:10),
-                    child: Row(
-                      children: [
-                        //Assign Label to Chum:
-                        Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          height: 30,
-                          child: Text("Assign to a Role?  ",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                        ),
-
-                        //Dropdown of possible chums:
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: DropdownButton<String>(
-                            value: assignedRole,
-                            icon: const Icon(Icons.arrow_downward),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: const TextStyle(color: Color(0xFF0F5298)),
-                            underline: Container(
-                              height: 2,
-                              color: Color(0xFF2565AE),
-                            ),
-                            onChanged: (newRole) {
-                              setState(() {
-                                assignedRole = newRole!;
-                              });
-                            },
-                            items: roles.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
 
                   //Submission button:
                   ElevatedButton(

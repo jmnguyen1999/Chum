@@ -1,39 +1,73 @@
-import 'package:chums/add_dialog.dart';
-import 'package:chums/pages/bottom_navigation/task_page.dart';
+import 'package:chum/add_dialog.dart';
+import 'package:chum/models/items/reminder.dart';
+import 'package:chum/models/items/task.dart';
+import 'package:chum/sqLite/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../edit_item.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
-import 'info_page.dart';
-import '../../models/circle.dart';
-import '../../models/item.dart';
-import '../../models/user.dart';
 import '../../constants.dart' as Constants;
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Chum',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(title: 'Chum'),
+    );
+  }
+}
 
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, required this.title, required this.circle}) : super(key: key);
+  HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
-  Circle circle;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<List<Item>> orderedTasks = [];
+  List<List<Task>> allTasks = [];
+  List<Reminder> allReminders = [];
 
-  List<Item> announcements = <Item>[];
+  void getTasks() async {
+    List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllTasks();
+    List<Task> listTasks = [];
+    listMap.forEach((map) => listTasks.add(Task.fromMap(map)));
+    setState(() {
+      allTasks = Task(id:9879, description: "null", dueDate: DateTime(1999)).getTasksByDate(listTasks);
+      print("Task list from getTasks(): " + allTasks.toString());
+    });
+  }
+  void getReminders() async {
+    List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllReminders();
+    List<Reminder> listReminders = [];
+    listMap.forEach((map) => listReminders.add(Reminder.fromMap(map)));
+    List<List<Reminder>> sortedReminders = Reminder(id:123,  description: "null", dueDate: DateTime(1999)).getRemindersByDate(listReminders);
+    setState(() {
+      allReminders = Reminder(id:123,  description: "null", dueDate: DateTime(1999)).to1DList(sortedReminders);
+      print("Reminders list from getReminders: " + allReminders.toString());
+    });
+  }
 
+  @override
+  void initState() {
+    getTasks();
+    getReminders();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    announcements = widget.circle.getAllAnnouncements();
-
-    //TODO: Will need to fix to make all Reminders and Expenses be a Task (So yes will need to make Reminders and Expenses child of a Task class
-    orderedTasks = widget.circle.getItemsByDate(Constants.TASK_LIST);
-
     return Scaffold(
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
@@ -48,65 +82,17 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => HomePage(title: widget.title)));
                         },
                         icon: Icon(Icons.home_filled, color: Colors.white)
                     ),
                   ),
-
-                  //2.) Task Icon: TaskPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
-                          }
-                        },
-                        icon: Icon(Icons.list_alt_outlined, color: Colors.white)
-                    ),
-                  ),
-
                   //3.) Add Icon: Add Dialog page - TODO
                   Expanded(
                     child: IconButton(
                         onPressed: (){
-                          /*showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SimpleDialog(
-                                  title: Text('Choose an Option'),
-                                  children: <Widget>[
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 1'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 2'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 3'),
-                                    ),
-                                    SimpleDialogOption(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Option 4'),
-                                    ),
-                                  ],
-                                );
-                              });*/
-
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_HOME)));
+                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -117,23 +103,11 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
+                                builder: (context) => ExpensesPage(title: widget.title)));
                           },
                         icon: Icon(Icons.monetization_on_outlined, color: Colors.white)
                     ),
                   ),
-
-                  //5.) Info Icon: InfoPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
-                          },
-                        icon: Icon(Icons.info_outlined, color: Colors.white)
-                    ),
-                  ),
-
                 ],
               )
           ),
@@ -166,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                         Container(
                           margin: EdgeInsets.only(left: 20, top: 50),
                           child: Text(
-                            'Hello Jo,',
+                            'Hello,',
                             style: TextStyle(
                               fontSize: 35,
                               fontWeight: FontWeight.bold,
@@ -191,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                                       Container(
                                         alignment: Alignment.topLeft,
                                         margin: EdgeInsets.only(left: 20, top: 5),
-                                        child: Text('Announcements',
+                                        child: Text('Reminders',
                                             style: TextStyle(
                                                 fontSize: 24,
                                             )
@@ -204,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                                         child: IconButton(
                                             onPressed: (){
                                               Navigator.push(context, MaterialPageRoute(
-                                                  builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_HOME)));
+                                                  builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false)));
                                             },
                                             icon: Icon(Icons.add_circle_outline)
                                         ),
@@ -225,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                                       ListView.builder(
                                           primary: false,
                                           shrinkWrap: true,
-                                          itemCount: announcements.length,
+                                          itemCount: allReminders.length,
                                           itemBuilder: (BuildContext context, int index){
                                             return Container(
                                               margin: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -233,28 +207,20 @@ class _HomePageState extends State<HomePage> {
                                                 children: [
                                                   Row(
                                                       children: [
-                                                        Container(
-                                                          margin: EdgeInsets.only(right: 10),
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: CircleAvatar(
-                                                              backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
-                                                          ),
-                                                        ),
                                                         Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Container(
                                                               margin: EdgeInsets.only(bottom: 5),
                                                               child: Text(
-                                                                  '${announcements[index].getDescription()}',
+                                                                  '${allReminders[index].getDescription()}',
                                                                   style: TextStyle(
                                                                     fontWeight: FontWeight.bold,
                                                                     fontSize:14
                                                                   )
                                                               ),
                                                             ),
-                                                            Text('Due date: ${announcements[index].getDateString()}',
+                                                            Text('Due date: ${allReminders[index].getDateString()}',
                                                               style: TextStyle(
                                                                 fontSize: 12,
                                                                 color: Colors.grey
@@ -287,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     primary: false,
-                                    itemCount: orderedTasks.length,
+                                    itemCount: allTasks.length,
                                     itemBuilder: (BuildContext context, int row) {
 
                                       //Transparent box to capture label and data:
@@ -295,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                                          // margin: EdgeInsets.only(top: 15),
                                           onTap: (){
                                             Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => EditItemPage(title: widget.title, circle: widget.circle, item: orderedTasks[row][0], page_from: Constants.KEY_HOME)));
+                                                builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedTask:allTasks[row][0])));
                                           },
                                           title: Container(
                                             margin: EdgeInsets.only(top: 15),
@@ -309,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                                                         alignment: Alignment.topLeft,
                                                         margin: EdgeInsets.only(
                                                             left: 20),
-                                                        child: Text(orderedTasks[row][0].getDateString(),
+                                                        child: Text(allTasks[row][0].getDateString(),
                                                             style: TextStyle(
                                                               fontSize: 16,
                                                             )
@@ -322,7 +288,7 @@ class _HomePageState extends State<HomePage> {
                                                         child: IconButton(
                                                             onPressed: (){
                                                               Navigator.push(context, MaterialPageRoute(
-                                                                  builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_HOME)));
+                                                                  builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:false,)));
                                                               },
                                                             icon: Icon(Icons.add_circle_outline)
                                                         ),
@@ -334,10 +300,10 @@ class _HomePageState extends State<HomePage> {
                                                   //Transparent container since every task is in own box:
                                                   Container(
                                                     width: 370,
-                                                    height: 60.0*(orderedTasks[row].length),
+                                                    height: 60.0*(allTasks[row].length),
 
                                                     child: ListView.builder(
-                                                      itemCount: orderedTasks[row].length,
+                                                      itemCount: allTasks[row].length,
                                                       itemBuilder: (BuildContext context, int col){
 
                                                         //What each individual task looks like:
@@ -361,7 +327,7 @@ class _HomePageState extends State<HomePage> {
                                                             ),
 
                                                             Text(
-                                                              '${orderedTasks[row][col].getDescription()}',
+                                                              '${allTasks[row][col].getDescription()}',
                                                               style: TextStyle(
                                                                 fontSize: 15,
                                                               ),

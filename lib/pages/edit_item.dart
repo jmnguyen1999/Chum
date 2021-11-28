@@ -1,20 +1,16 @@
-import 'package:chums/models/circle.dart';
-import 'package:chums/models/item.dart';
-import 'package:chums/models/user.dart';
+
 import 'package:flutter/material.dart';
 
+/*
 import 'bottom_navigation/add_page.dart';
 import 'bottom_navigation/expenses_page.dart';
 import 'bottom_navigation/home_page.dart';
-import 'bottom_navigation/info_page.dart';
-import 'bottom_navigation/task_page.dart';
 import '../../constants.dart' as Constants;
 
 class EditItemPage extends StatefulWidget {
  // const EditItemPage({Key? key}) : super(key: key);
-  EditItemPage({Key? key, required this.title, required this.circle, required this.item, required this.page_from}) : super(key: key);
+  EditItemPage({Key? key, required this.title,required this.item, required this.page_from}) : super(key: key);
   final String title;
-  Circle circle;
   Item item;
   String page_from;
 
@@ -263,7 +259,8 @@ class _EditItemPageState extends State<EditItemPage> {
                     child: Column(
                         children: [
 
-                          /*
+                          */
+/*
                   //Title:
                   Text("Add new item",
                     textAlign: TextAlign.left,
@@ -272,7 +269,8 @@ class _EditItemPageState extends State<EditItemPage> {
                       fontWeight: FontWeight.bold,
                     )
                   ),
-*/
+*//*
+
 
 
                           //Question 1: What item we adding?
@@ -507,3 +505,4 @@ class _EditItemPageState extends State<EditItemPage> {
     );
   }
 }
+*/

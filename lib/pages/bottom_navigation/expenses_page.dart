@@ -1,38 +1,43 @@
-import 'package:chums/pages/bottom_navigation/task_page.dart';
+
+import 'package:chum/models/items/expense.dart';
+import 'package:chum/sqLite/database.dart';
 import 'package:flutter/material.dart';
 
 import 'add_page.dart';
 import 'home_page.dart';
-import 'info_page.dart';
-import '../../models/circle.dart';
-import '../../models/item.dart';
 import '../../constants.dart' as Constants;
 
 
 class ExpensesPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
-  ExpensesPage({Key? key, required this.title, required this.circle}) : super(key: key);
+  ExpensesPage({Key? key, required this.title}) : super(key: key);
   final String title;
-  Circle circle;
   @override
   _ExpensesPageState createState() => _ExpensesPageState();
 }
 
 class _ExpensesPageState extends State<ExpensesPage> {
 
-  List<Item> expenses = <Item>[];
+  List<Expense> expenses = <Expense>[];
 
+  void getExpenses() async {
+    List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllExpenses();
+    List<Expense> listExpenses = [];
+    listMap.forEach((map) => listExpenses.add(Expense.fromMap(map)));
+    List<List<Expense>> sortedExpenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).getExpensesByDate(listExpenses);
+    setState(() {
+      expenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).to1DList(sortedExpenses);
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    getExpenses();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-
-    expenses = widget.circle.getAllExpenses();
-
-
-    //What I'm pasting in:
     return Scaffold(
-/*      appBar: AppBar(
-        title: Text(widget.title),
-      ),*/
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -46,22 +51,9 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => HomePage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => HomePage(title: widget.title)));
                         },
                         icon: Icon(Icons.home_filled, color: Colors.white)
-                    ),
-                  ),
-
-                  //2.) Task Icon: TaskPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                          {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => TaskPage(title: widget.title, circle: widget.circle)));
-                          }
-                        },
-                        icon: Icon(Icons.list_alt_outlined, color: Colors.white)
                     ),
                   ),
 
@@ -70,7 +62,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_EXPENSES,)));
+                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_EXPENSES, isEdit:false)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -81,23 +73,11 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: IconButton(
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => ExpensesPage(title: widget.title, circle: widget.circle)));
+                              builder: (context) => ExpensesPage(title: widget.title)));
                         },
                         icon: Icon(Icons.monetization_on_outlined, color: Colors.white)
                     ),
                   ),
-
-                  //5.) Info Icon: InfoPage
-                  Expanded(
-                    child: IconButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => InfoPage(title: widget.title, circle: widget.circle)));
-                        },
-                        icon: Icon(Icons.info_outlined, color: Colors.white)
-                    ),
-                  ),
-
                 ],
               )
           ),
@@ -158,7 +138,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                             child: IconButton(
                                                 onPressed: (){
                                                   Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, circle: widget.circle, page_from: Constants.KEY_EXPENSES,)));
+                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_EXPENSES, isEdit:false)));
                                                 },
                                                 icon: Icon(Icons.add_circle_outline)
                                             ),
@@ -187,14 +167,6 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                                         children: [
                                                           Row(
                                                               children: [
-                                                                Container(
-                                                                  margin: EdgeInsets.only(right: 10),
-                                                                  width: 30,
-                                                                  height: 30,
-                                                                  child: CircleAvatar(
-                                                                    backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
-                                                                  ),
-                                                                ),
                                                                 Column(
                                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                                   children: [

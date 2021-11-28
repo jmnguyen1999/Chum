@@ -1,6 +1,3 @@
-import 'models/circle.dart';
-import 'models/item.dart';
-import 'models/user.dart';
 
 //For diff pages:
 const String KEY_HOME = "home_page";
@@ -20,7 +17,7 @@ const String ANNOUNCEMENTS_LIST = "all announcements";
 class Constants {
 
   Constants();
-
+/*
   //All User Accounts:
   User me = User("jmnguyen", "pass", "email", "Jo", "Nguyen", null);
   User user2 = User("pon23", "pass", "email", "Po", "Lam", null);
@@ -52,12 +49,12 @@ class Constants {
     switch(roomCode){
       case "FWET":
       //Tasks:
-        /*tasks.add(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
+        *//*tasks.add(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'Take out trash', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'someething here', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
         tasks.add(Item(1, 'something to do on the 9th', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 9)));
         tasks.add(Item(1, 'on 10th i like food make food', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
-        tasks.add(Item(1, 'on 10th i do something else', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));*/
+        tasks.add(Item(1, 'on 10th i do something else', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));*//*
 
         circle.addTask(Item(1, 'on 10th i like food make food', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 10)));
         circle.addTask(Item(1, 'Buy tissue paper', User("heyBob", "pass", "email", "Po", "Lam", null), null, DateTime(2021, 9, 8)));
@@ -86,10 +83,10 @@ class Constants {
 
         //TODO: Add more members
         return circle;
-      /*case "LOKI":
+      *//*case "LOKI":
         break;
       case "PNTO":
-        break;*/
+        break;*//*
       default:
         print("You didn't enter one of your 3 roomcodes stupid");
         return getEmptyCircle();
@@ -116,5 +113,5 @@ class Constants {
         getEmptyItems(),
         getEmptyItems(),
         getEmptyItems());
-  }
+  }*/
 }

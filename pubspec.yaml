@@ -1,5 +1,5 @@
-name: chums
-description: An app for housemates' organization of tasks
+name: chum
+description: An app for organizing day-to-day tasks and reminders
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -23,6 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  sqflite: ^1.3.0
+  path_provider: ^1.5.1
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,46 +1,52 @@
-import 'package:flutter/cupertino.dart';
-class Task{
+class Expense{
 
-  int id;
+  double cost;
   String description;
   DateTime dueDate;
+  int id;
 
-  Task({required this.id, required this.description, required this.dueDate});
+  Expense({required this.id, required this.description, required this.cost, dueDate}) :
+        dueDate = dueDate ?? DateTime(1999);
 
   //to be used when inserting a row in the table
   Map<String, dynamic> toMapWithoutId() {
     final map = new Map<String, dynamic>();
-    map["task_description"] = description;
-    map["task_due_date"] = dueDate.toString();
+    map["expense_description"] = description;
+    map["expense_due_date"] = dueDate.toString();
+    map["expense_cost"] = cost;
     return map;
   }
+
   //to be used when updating a row in the table
   Map<String, dynamic> toMap() {
     final map = new Map<String, dynamic>();
-    map["task_id"] = id;
-    map["task_description"] = description;
-    map["task_due_date"] = dueDate.toString();
+    map["expense_id"] = id;
+    map["expense_description"] = description;
+    map["expense_due_date"] = dueDate.toString();
+    map["expense_cost"] = cost;
     return map;
   }
+
   //to be used when converting the row into object
-  factory Task.fromMap(Map<String, dynamic> data) => new Task(
-    id: data['task_id'],
-    description: data['task_description'],
-    dueDate: DateTime.parse(data['task_due_date']),
+  factory Expense.fromMap(Map<String, dynamic> data) => new Expense(
+    id: data['expense_id'],
+    description: data['reminder_description'],
+    cost: data['expense_cost'],
+    dueDate: DateTime.parse(data['reminder_due_date']),
   );
 
-  List<List<Task>> getTasksByDate(List<Task> listTasks){
-    List<List<Task>> result = [];
-    if(listTasks.isNotEmpty) {
-      for (int i = 0; i < listTasks.length; i++) {
+  List<List<Expense>> getExpensesByDate(List<Expense> listExpenses){
+    List<List<Expense>> result = [];
+    if(listExpenses.isNotEmpty) {
+      for (int i = 0; i < listExpenses.length; i++) {
         //Assume new date --> need a new row/list:
-        List<Task> newDate = <Task>[];
-        newDate.add(listTasks[i]);
-        DateTime dateOfItems = listTasks[i].getDate();
+        List<Expense> newDate = <Expense>[];
+        newDate.add(listExpenses[i]);
+        DateTime dateOfItems = listExpenses[i].getDate();
 
         //Check every other item's date + see if need to add:
-        for (int j = i + 1; j < listTasks.length; j++) {
-          Task otherItem = listTasks[j];
+        for (int j = i + 1; j < listExpenses.length; j++) {
+          Expense otherItem = listExpenses[j];
           DateTime otherDate = otherItem.getDate();
 
           print("date = " + dateOfItems.toString() + "  otherdate = " +
@@ -63,7 +69,16 @@ class Task{
 
     return result;
   }
-
+  List<Expense> to1DList(List<List<Expense>> listOfLists){
+    List<Expense> result = [];
+    for(int row = 0 ; row < listOfLists.length; row++){
+      List<Expense> currRow = listOfLists[row];
+      for(int col = 0; col <currRow.length; col++){
+        result.add(currRow[col]);
+      }
+    }
+    return result;
+  }
 
   //Getter methods:
   int getId(){
@@ -83,6 +98,9 @@ class Task{
   }
   DateTime getDate(){
     return dueDate;
+  }
+  double getCost(){
+    return cost;
   }
 
 }

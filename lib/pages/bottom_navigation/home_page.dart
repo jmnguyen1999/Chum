@@ -201,48 +201,63 @@ class _HomePageState extends State<HomePage> {
                                           shrinkWrap: true,
                                           itemCount: allReminders.length,
                                           itemBuilder: (BuildContext context, int index){
-                                            return Container(
-                                              margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                      children: [
-                                                        Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: [
-                                                            Container(
-                                                              margin: EdgeInsets.only(bottom: 5),
-                                                              child: Text(
-                                                                  '${allReminders[index].getDescription()}',
-                                                                  style: TextStyle(
-                                                                    fontWeight: FontWeight.bold,
-                                                                    fontSize:14
-                                                                  )
+                                            final reminder = allReminders[index].getDescription();
+                                            return Dismissible(
+                                              key: UniqueKey(),
+                                              onDismissed: (direction) {
+                                                print("reminder id to delete: " + allReminders[index].getId().toString());
+                                                DatabaseHelper.instance.deleteReminder(allReminders[index].getId());
+                                                setState(() {
+                                                  allReminders.removeAt(index);
+                                                });
+                                                // Then show a snackbar.
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(content: Text('$reminder deleted')));
+                                              },
+                                              background: Container(color: Color(0xFF2565AE)),
+                                              child: Container(
+                                                margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                        children: [
+                                                          Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Container(
+                                                                margin: EdgeInsets.only(bottom: 5),
+                                                                child: Text(
+                                                                    '${allReminders[index].getDescription()}',
+                                                                    style: TextStyle(
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize:14
+                                                                    )
+                                                                ),
                                                               ),
-                                                            ),
-                                                            Text('Due date: ${allReminders[index].getDateString()}',
-                                                              style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Colors.grey
-                                                              ),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ]
-                                                  ),
-
-                                                  Container(
-                                                    margin: EdgeInsets.only(top: 10),
-                                                    child: Divider(
-                                                        height: 2,
-                                                        thickness: 0.5,
-                                                        indent:0,
-                                                        endIndent:0,
-                                                        color: Color(0xFF3C99DC)
+                                                              Text('Due date: ${allReminders[index].getDateString()}',
+                                                                style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors.grey
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                                        ]
                                                     ),
-                                                  )
-                                                ]
-                                              )
+
+                                                    Container(
+                                                      margin: EdgeInsets.only(top: 10),
+                                                      child: Divider(
+                                                          height: 2,
+                                                          thickness: 0.5,
+                                                          indent:0,
+                                                          endIndent:0,
+                                                          color: Color(0xFF3C99DC)
+                                                      ),
+                                                    )
+                                                  ]
+                                                )
+                                              ),
                                             );
                                       })
                                   ),
@@ -305,35 +320,49 @@ class _HomePageState extends State<HomePage> {
                                                     child: ListView.builder(
                                                       itemCount: allTasks[row].length,
                                                       itemBuilder: (BuildContext context, int col){
-
+                                                        final task = allTasks[row][col];
                                                         //What each individual task looks like:
-                                                      return Container(
-                                                        width: 370,
-                                                        height: 45,
-                                                        margin: EdgeInsets.only(top: 10),
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.white38,
-                                                            borderRadius: BorderRadius.all(Radius.circular(20))
-                                                        ),
-                                                        child: Row(
-                                                          children: [
-                                                            Container(
-                                                              margin: EdgeInsets.only(left: 15, right: 10),
-                                                              width: 30,
-                                                              height: 30,
-                                                              child: CircleAvatar(
-                                                                backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
+                                                      return Dismissible(
+                                                        key: UniqueKey(),
+                                                        onDismissed: (direction) {
+                                                          print("reminder id to delete: " + allTasks[row][col].getId().toString());
+                                                          DatabaseHelper.instance.deleteTask(allTasks[row][col].getId());
+                                                          setState(() {
+                                                            allTasks.removeAt(row).removeAt(col);
+                                                          });
+                                                          // Then show a snackbar.
+                                                          ScaffoldMessenger.of(context)
+                                                              .showSnackBar(SnackBar(content: Text('$task deleted')));
+                                                        },
+                                                        background: Container(color: Color(0xFF2565AE)),
+                                                        child: Container(
+                                                          width: 370,
+                                                          height: 45,
+                                                          margin: EdgeInsets.only(top: 10),
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.white38,
+                                                              borderRadius: BorderRadius.all(Radius.circular(20))
+                                                          ),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                margin: EdgeInsets.only(left: 15, right: 10),
+                                                                width: 30,
+                                                                height: 30,
+                                                                child: CircleAvatar(
+                                                                  backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
+                                                                ),
                                                               ),
-                                                            ),
 
-                                                            Text(
-                                                              '${allTasks[row][col].getDescription()}',
-                                                              style: TextStyle(
-                                                                fontSize: 15,
-                                                              ),
-                                                            )
-                                                          ]
-                                                        )
+                                                              Text(
+                                                                '${allTasks[row][col].getDescription()}',
+                                                                style: TextStyle(
+                                                                  fontSize: 15,
+                                                                ),
+                                                              )
+                                                            ]
+                                                          )
+                                                        ),
                                                       );
                                                       }
                                                     )

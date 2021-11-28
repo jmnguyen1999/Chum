@@ -51,20 +51,23 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $taskTable (
+            $taskId integer primary key,
             $taskColDescription text not null,
             $taskColDueDate text NOT NULL
           )
           ''');
     await db.execute('''
       create table $reminderTable (
+        $reminderId integer primary key,
         $reminderColDescription text not null,
         $reminderColDueDate text null
        )''');
     await db.execute('''
        create table $expenseTable (
+        $expenseId integer primary key,
         $expenseColDescription text not null,
         $expenseColDueDate text null,
-        $expenseColCost int not null
+        $expenseColCost double not null
        )''');
   }
 

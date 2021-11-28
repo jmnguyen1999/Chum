@@ -30,9 +30,9 @@ class Expense{
   //to be used when converting the row into object
   factory Expense.fromMap(Map<String, dynamic> data) => new Expense(
     id: data['expense_id'],
-    description: data['reminder_description'],
+    description: data['expense_description'],
     cost: data['expense_cost'],
-    dueDate: DateTime.parse(data['reminder_due_date']),
+    dueDate: DateTime.parse(data['expense_due_date']),
   );
 
   List<List<Expense>> getExpensesByDate(List<Expense> listExpenses){

@@ -27,6 +27,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
     List<List<Expense>> sortedExpenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).getExpensesByDate(listExpenses);
     setState(() {
       expenses = Expense(id:123,  description: "null", cost:-1, dueDate: DateTime(1999)).to1DList(sortedExpenses);
+      print("expenses from getExpense(): " + expenses.toString());
     });
   }
   @override
@@ -161,48 +162,63 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                               shrinkWrap: true,
                                               itemCount: expenses.length,
                                               itemBuilder: (BuildContext context, int index){
-                                                return Container(
-                                                    margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                                                    child: Column(
-                                                        children: [
-                                                          Row(
-                                                              children: [
-                                                                Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  children: [
-                                                                    Container(
-                                                                      margin: EdgeInsets.only(bottom: 5),
-                                                                      child: Text(
-                                                                          '${expenses[index].getDescription()}',
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize:14
-                                                                          )
+                                                final expense = expenses[index].getDescription();
+                                                return Dismissible(
+                                                  key: UniqueKey(),
+                                                  onDismissed: (direction) {
+                                                    print("reminder id to delete: " + expenses[index].getId().toString());
+                                                    DatabaseHelper.instance.deleteExpense(expenses[index].getId());
+                                                    setState(() {
+                                                      expenses.removeAt(index);
+                                                    });
+                                                    // Then show a snackbar.
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(SnackBar(content: Text('$expense deleted')));
+                                                  },
+                                                  background: Container(color: Color(0xFF2565AE)),
+                                                  child: Container(
+                                                      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                                                      child: Column(
+                                                          children: [
+                                                            Row(
+                                                                children: [
+                                                                  Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Container(
+                                                                        margin: EdgeInsets.only(bottom: 5),
+                                                                        child: Text(
+                                                                            '${expenses[index].getDescription()}',
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontSize:14
+                                                                            )
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    Text('Due date: ${expenses[index].getDateString()}',
-                                                                      style: TextStyle(
-                                                                          fontSize: 12,
-                                                                          color: Colors.grey
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                )
-                                                              ]
-                                                          ),
-
-                                                          Container(
-                                                            margin: EdgeInsets.only(top: 10),
-                                                            child: Divider(
-                                                                height: 2,
-                                                                thickness: 0.5,
-                                                                indent:0,
-                                                                endIndent:0,
-                                                                color: Color(0xFF3C99DC)
+                                                                      Text('Due date: ${expenses[index].getDateString()}',
+                                                                        style: TextStyle(
+                                                                            fontSize: 12,
+                                                                            color: Colors.grey
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  )
+                                                                ]
                                                             ),
-                                                          )
-                                                        ]
-                                                    )
+
+                                                            Container(
+                                                              margin: EdgeInsets.only(top: 10),
+                                                              child: Divider(
+                                                                  height: 2,
+                                                                  thickness: 0.5,
+                                                                  indent:0,
+                                                                  endIndent:0,
+                                                                  color: Color(0xFF3C99DC)
+                                                              ),
+                                                            )
+                                                          ]
+                                                      )
+                                                  ),
                                                 );
                                               })
 

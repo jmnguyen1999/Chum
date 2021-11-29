@@ -38,6 +38,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<List<Task>> allTasks = [];
   List<Reminder> allReminders = [];
+  List<bool> _isChecked = [];
+  int numTasks = 0;
 
   void getTasks() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllTasks();
@@ -65,6 +67,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double remindersHeight = (90*allReminders.length).toDouble();
+
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Color(0xFF2565AE);
+      }
+      return Color(0xFF0F5298);
+    }
+
     return Scaffold(
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
@@ -165,7 +181,8 @@ class _HomePageState extends State<HomePage> {
                                         margin: EdgeInsets.only(left: 20, top: 5),
                                         child: Text('Reminders',
                                             style: TextStyle(
-                                                fontSize: 24,
+                                                fontSize: 26,
+                                                fontWeight: FontWeight.bold
                                             )
                                         ),
                                       ),
@@ -187,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                   //Announcement Data:
                                   Container(
                                     width: 370,
-                                    height: 200,
+                                    height: remindersHeight,
                                     decoration: BoxDecoration(
                                         color: Colors.white38,
                                         borderRadius: BorderRadius.all(Radius.circular(10))
@@ -200,61 +217,68 @@ class _HomePageState extends State<HomePage> {
                                           itemCount: allReminders.length,
                                           itemBuilder: (BuildContext context, int index){
                                             final reminder = allReminders[index].getDescription();
-                                            return Dismissible(
-                                              key: UniqueKey(),
-                                              onDismissed: (direction) {
-                                                print("reminder id to delete: " + allReminders[index].getId().toString());
-                                                DatabaseHelper.instance.deleteReminder(allReminders[index].getId());
-                                                setState(() {
-                                                  allReminders.removeAt(index);
-                                                });
-                                                // Then show a snackbar.
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(content: Text('$reminder deleted')));
+                                            return ListTile(
+                                              onTap: (){
+                                                print("ListTile tapped from homepage, sending task: " + allReminders[index].getDescription());
+                                                Navigator.push(context, MaterialPageRoute(
+                                                    builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedReminder:allReminders[index])));
                                               },
-                                              background: Container(color: Color(0xFF2565AE)),
-                                              child: Container(
-                                                margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                        children: [
-                                                          Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              Container(
-                                                                margin: EdgeInsets.only(bottom: 5),
-                                                                child: Text(
-                                                                    '${allReminders[index].getDescription()}',
-                                                                    style: TextStyle(
-                                                                      fontWeight: FontWeight.bold,
-                                                                      fontSize:14
-                                                                    )
+                                              title: Dismissible(
+                                                key: UniqueKey(),
+                                                onDismissed: (direction) {
+                                                  print("reminder id to delete: " + allReminders[index].getId().toString());
+                                                  DatabaseHelper.instance.deleteReminder(allReminders[index].getId());
+                                                  setState(() {
+                                                    allReminders.removeAt(index);
+                                                  });
+                                                  // Then show a snackbar.
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(content: Text('$reminder deleted')));
+                                                },
+                                                background: Container(color: Color(0xFF2565AE)),
+                                                child: Container(
+                                                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Container(
+                                                                  margin: EdgeInsets.only(bottom: 5),
+                                                                  child: Text(
+                                                                      '${allReminders[index].getDescription()}',
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize:14
+                                                                      )
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Text('Due date: ${allReminders[index].getDateString()}',
-                                                                style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors.grey
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
-                                                        ]
-                                                    ),
-
-                                                    Container(
-                                                      margin: EdgeInsets.only(top: 10),
-                                                      child: Divider(
-                                                          height: 2,
-                                                          thickness: 0.5,
-                                                          indent:0,
-                                                          endIndent:0,
-                                                          color: Color(0xFF3C99DC)
+                                                                Text('Due date: ${allReminders[index].getDateString()}',
+                                                                  style: TextStyle(
+                                                                    fontSize: 12,
+                                                                    color: Colors.grey
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          ]
                                                       ),
-                                                    )
-                                                  ]
-                                                )
+
+                                                      Container(
+                                                        margin: EdgeInsets.only(top: 10),
+                                                        child: Divider(
+                                                            height: 2,
+                                                            thickness: 0.5,
+                                                            indent:0,
+                                                            endIndent:0,
+                                                            color: Color(0xFF3C99DC)
+                                                        ),
+                                                      )
+                                                    ]
+                                                  )
+                                                ),
                                               ),
                                             );
                                       })
@@ -263,10 +287,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Container(
                               alignment: Alignment.topLeft,
-                              margin: EdgeInsets.only(left: 20, top: 15),
+                              margin: EdgeInsets.only(left: 20, top: 30),
                               child: Text('Tasks:',
                                   style: TextStyle(
-                                    fontSize: 24,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold
                                   )
                               ),
                             ),
@@ -279,14 +304,8 @@ class _HomePageState extends State<HomePage> {
                                     itemBuilder: (BuildContext context, int row) {
 
                                       //Transparent box to capture label and data:
-                                      return ListTile(
-                                         // margin: EdgeInsets.only(top: 15),
-                                          onTap: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedTask:allTasks[row][0])));
-                                          },
-                                          title: Container(
-                                            margin: EdgeInsets.only(top: 5),
+                                        return Container(
+                                            margin: EdgeInsets.only(),
                                             child: Column(
                                                 children: [
 
@@ -329,53 +348,68 @@ class _HomePageState extends State<HomePage> {
                                                       itemBuilder: (BuildContext context, int col){
                                                         final task = allTasks[row][col];
                                                         //What each individual task looks like:
-                                                      return Dismissible(
-                                                        key: UniqueKey(),
-                                                        onDismissed: (direction) {
-                                                          print("reminder id to delete: " + allTasks[row][col].getId().toString());
-                                                          DatabaseHelper.instance.deleteTask(allTasks[row][col].getId());
-                                                          setState(() {
-                                                            allTasks.removeAt(row).removeAt(col);
-                                                          });
-                                                          // Then show a snackbar.
-                                                          ScaffoldMessenger.of(context)
-                                                              .showSnackBar(SnackBar(content: Text('$task deleted')));
+                                                      return ListTile(
+                                                        onTap: (){
+                                                          print("ListTile tapped from homepage, sending task: " + allTasks[row][col].getDescription());
+                                                          Navigator.push(context, MaterialPageRoute(
+                                                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedTask:allTasks[row][col])));
                                                         },
-                                                        background: Container(color: Color(0xFF2565AE)),
-                                                        child: Container(
-                                                          width: 370,
-                                                          height: 45,
-                                                          margin: EdgeInsets.only(top: 10),
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.white38,
-                                                              borderRadius: BorderRadius.all(Radius.circular(20))
-                                                          ),
-                                                          child: Row(
-                                                            children: [
-                                                              Container(
-                                                                margin: EdgeInsets.only(left: 15, right: 10),
-                                                                width: 30,
-                                                                height: 30,
-                                                                child: CircleAvatar(
-                                                                  backgroundImage: NetworkImage('https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-icons.com%2Ficon%2Fmale-boy-person-people-avatar%2F159358&psig=AOvVaw0ibLF6R8vjZ3SCP9HiVhkg&ust=1637115663031000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjvoZ7pm_QCFQAAAAAdAAAAABAD'),
+                                                        title: Dismissible(
+                                                          key: UniqueKey(),
+                                                          onDismissed: (direction) {
+                                                            print("reminder id to delete: " + allTasks[row][col].getId().toString());
+                                                            DatabaseHelper.instance.deleteTask(allTasks[row][col].getId());
+                                                            setState(() {
+                                                              allTasks.removeAt(row).removeAt(col);
+                                                            });
+                                                            // Then show a snackbar.
+                                                            ScaffoldMessenger.of(context)
+                                                                .showSnackBar(SnackBar(content: Text('$task deleted')));
+                                                          },
+                                                          background: Container(color: Color(0xFF2565AE)),
+                                                          child: Container(
+                                                            width: 370,
+                                                            height: 45,
+                                                            margin: EdgeInsets.only(top: 5),
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.white38,
+                                                                borderRadius: BorderRadius.all(Radius.circular(20))
+                                                            ),
+                                                            child: Row(
+                                                              children: [
+                                                                Container(
+                                                                  margin: EdgeInsets.only(left: 15, right: 10),
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  child:
+                                                                    Checkbox(
+                                                                      checkColor: Colors.white,
+                                                                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                                                                      value: allTasks[row][col].getIsDone(),
+                                                                      onChanged: (bool? value) {
+                                                                        setState(() {
+                                                                          allTasks[row][col].isDone = value!;
+                                                                        });
+                                                                      },
+                                                                    )
                                                                 ),
-                                                              ),
 
-                                                              Text(
-                                                                '${allTasks[row][col].getDescription()}',
-                                                                style: TextStyle(
-                                                                  fontSize: 15,
-                                                                ),
-                                                              )
-                                                            ]
-                                                          )
+                                                                Text(
+                                                                  '${allTasks[row][col].getDescription()}',
+                                                                  style: TextStyle(
+                                                                    fontSize: 15,
+                                                                  ),
+                                                                )
+                                                              ]
+                                                            )
+                                                          ),
                                                         ),
                                                       );
                                                       }
                                                     )
                                                     )
                                                 ]),
-                                          ));
+                                          );
                                     })
   ]
     )

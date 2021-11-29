@@ -6,8 +6,10 @@ class Expense{
   String description;
   DateTime dueDate;
   int id;
+  bool isDone;
 
-  Expense({required this.id, required this.description, required this.cost, dueDate}) :
+  Expense({required this.id, required this.description, required this.cost, dueDate, isDone}) :
+        isDone = false,
         dueDate = dueDate ?? DateTime(1999);
 
   //to be used when inserting a row in the table
@@ -37,19 +39,11 @@ class Expense{
     dueDate: DateTime.parse(data['expense_due_date']),
   );
 
-
-  /*List<Expense> to1DList(List<List<Expense>> listOfLists){
-    List<Expense> result = [];
-    for(int row = 0 ; row < listOfLists.length; row++){
-      List<Expense> currRow = listOfLists[row];
-      for(int col = 0; col <currRow.length; col++){
-        result.add(currRow[col]);
-      }
-    }
-    return result;
-  }*/
-
   //Getter methods:
+  bool getIsDone(){
+    return isDone;
+  }
+
   int getId(){
     return id;
   }

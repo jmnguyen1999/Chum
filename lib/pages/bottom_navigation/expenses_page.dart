@@ -35,7 +35,37 @@ class _ExpensesPageState extends State<ExpensesPage> {
   }
   @override
   Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Color(0xFF2565AE);
+      }
+      return Color(0xFF0F5298);
+    }
+
     return Scaffold(
+        appBar: AppBar(
+            title: Row(
+              children: [
+                Container(
+                    margin: EdgeInsets.only(left: 98),
+                    child: Text('')
+                ),
+              ],
+            ),
+            backgroundColor: Color(0xFF3C99DC),
+            leading: new IconButton(
+                icon: new Icon(Icons.arrow_back_ios_outlined),
+                onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
+                {
+                  Navigator.of(context).pop();
+                }
+            )
+        ),
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -179,6 +209,16 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                                           children: [
                                                             Row(
                                                                 children: [
+                                                                  Checkbox(
+                                                                    checkColor: Colors.white,
+                                                                    fillColor: MaterialStateProperty.resolveWith(getColor),
+                                                                    value: expenses[index].getIsDone(),
+                                                                    onChanged: (bool? value) {
+                                                                      setState(() {
+                                                                        expenses[index].isDone = value!;
+                                                                      });
+                                                                    },
+                                                                  ),
                                                                   Column(
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [

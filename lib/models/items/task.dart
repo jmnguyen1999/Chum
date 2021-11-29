@@ -6,10 +6,10 @@ class Task{
   int id;
   String description;
   DateTime dueDate;
-  int position;
+  bool isDone;
 
-  Task({required this.id, required this.description, required this.dueDate, position}):
-      position = position ?? -1;
+  Task({required this.id, required this.description, required this.dueDate, isDone}):
+      isDone = false;
 
   //to be used when inserting a row in the table
   Map<String, dynamic> toMapWithoutId() {
@@ -67,7 +67,9 @@ class Task{
     return result;
   }
 
-
+  bool getIsDone(){
+    return isDone;
+  }
   //Getter methods:
   int getId(){
     return id;

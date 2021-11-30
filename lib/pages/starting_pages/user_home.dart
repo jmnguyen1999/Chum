@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
-import '../bottom_navigation/home_page.dart';
+import '../bottom_navigation/main.dart';
 
 
 class UserHomePage extends StatefulWidget {

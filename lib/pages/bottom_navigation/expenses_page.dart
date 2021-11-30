@@ -4,7 +4,7 @@ import 'package:chum/sqLite/database.dart';
 import 'package:flutter/material.dart';
 
 import 'add_page.dart';
-import 'home_page.dart';
+import '../../main.dart';
 import '../../constants.dart' as Constants;
 
 

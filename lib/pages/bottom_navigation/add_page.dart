@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../settings_page.dart';
 import 'expenses_page.dart';
-import 'home_page.dart';
+import '../../main.dart';
 
 import '../../constants.dart' as Constants;
 
@@ -19,8 +19,8 @@ class AddPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
   AddPage({Key? key, required this.title, required this.page_from, required this.isEdit, selectedTask, selectedReminder,selectedExpense}) :
         selectedTask = selectedTask ?? Task(id:-1, description:"null", dueDate: DateTime(1999)),
-        selectedReminder = selectedReminder ?? Reminder(id:-2, description:"null", dueDate: DateTime(1999)),
-        selectedExpense = selectedExpense ?? Expense(id:-3, description:"null", cost:0, dueDate: DateTime(1999)),
+        selectedReminder = selectedReminder ?? Reminder(id:-3, description:"null", dueDate: DateTime(1999)),
+        selectedExpense = selectedExpense ?? Expense(id:-2, description:"null", cost:0, dueDate: DateTime(1999)),
         super(key: key);
 
   final String title;
@@ -47,19 +47,21 @@ class _AddPageState extends State<AddPage> {
   TextEditingController costController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
-
+  DateTime? picked = DateTime.now();
 
   //Purpose: Allow user to select a date, save selectedDate as global variable
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (widget.isEdit || (picked != null && picked != selectedDate)) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
+        print(selectedDate.toString());
       });
+    }
   }
 
   //Purpose: When creation of item is done, create an Item object and store it:
@@ -162,6 +164,7 @@ class _AddPageState extends State<AddPage> {
   //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
+    final maxLines = 3;
 
     //If we are editing something, pre-fill values
     if (widget.isEdit) {
@@ -169,21 +172,28 @@ class _AddPageState extends State<AddPage> {
       if(widget.selectedTask.getId() != -1){
         print("was a task");
         descriptionController.text = widget.selectedTask.getDescription();
-        selectedDate = widget.selectedTask.getDate();
         taskType = "Task";
+        if(picked != selectedDate){
+          selectedDate = widget.selectedTask.getDate();
+        }
       }
       else if(widget.selectedExpense.getId() != -2){
         print("was an expense");
         descriptionController.text = widget.selectedExpense.getDescription();
-        selectedDate = widget.selectedExpense.getDate();
+
         costController.text = widget.selectedExpense.getCost().toString();
         taskType = "Expense";
+        if(picked != selectedDate){
+          selectedDate = widget.selectedExpense.getDate();
+        }
       }
       else{
         print("was a reminder");
         descriptionController.text = widget.selectedReminder.getDescription();
-        selectedDate = widget.selectedReminder.getDate();
         taskType = "Reminder";
+        if(picked != selectedDate){
+          selectedDate = widget.selectedReminder.getDate();
+        }
       }
     }
 
@@ -341,10 +351,11 @@ class _AddPageState extends State<AddPage> {
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    height: 35,
+                    //height: maxLines*24,
                     width: 350,
                     child: TextField(
                       controller: descriptionController,
+                      //maxLines: maxLines,
                      // cursorColor: Color(0xFF0F5298),
                       obscureText: false,
                       decoration: InputDecoration(
@@ -372,7 +383,7 @@ class _AddPageState extends State<AddPage> {
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    height: 35,
+                    //height: 35,
                     width: 350,
                     child: TextField(
                       controller: costController,

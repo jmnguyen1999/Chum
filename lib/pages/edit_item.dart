@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /*
 import 'bottom_navigation/add_page.dart';
 import 'bottom_navigation/expenses_page.dart';
-import 'bottom_navigation/home_page.dart';
+import 'bottom_navigation/main.dart';
 import '../../constants.dart' as Constants;
 
 class EditItemPage extends StatefulWidget {

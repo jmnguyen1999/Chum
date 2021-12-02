@@ -12,6 +12,7 @@ import 'expenses_page.dart';
 import '../../main.dart';
 
 import '../../constants.dart' as Constants;
+import 'home_page.dart';
 
 //Purpose:  Given the Circle, we have access to all Tasks, Announcements, Reminders, and Expenses. We will update this Circle object and send it back to whoever called this page (us)
 class AddPage extends StatefulWidget {
@@ -327,201 +328,245 @@ class _AddPageState extends State<AddPage> {
           ),
           child: Column(
               children:[
-          SingleChildScrollView(
-            child: Column(
-                children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                        children: [
 
-                  //Question 1: What item we adding?
-                  Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top:20, left: 15, right: 60),
-                          child:
-                            Text("Item Type",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              )
-                            )
-                      ),
+                          //Question 1: What item we adding?
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top:20, left: 15, right: 60),
+                                  child:
+                                    Text("Item Type",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      )
+                                    )
+                              ),
 
-                      Container(
-                        margin: EdgeInsets.only(top:20, left: 15, right: 60),
-                        child:DropdownButton<String>(
-                          value: taskType,
-                          icon: const Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Color(0xFF0F5298)),
-                          underline: Container(
-                            height: 2,
-                            color: Color(0xFF2565AE),
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              taskType = newValue!;
-                            });
-                          },
-                          items: <String>['Task', 'Reminder', 'Expense']
-                              .map<DropdownMenuItem<String>>((String value) {
-                                if(value == "Expense"){
-                                  //TODO: Show/hide the Cost question
-                                }
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  //Question 2: Description
-                  //Title:
-                  Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(left: 15, top:25),
-                    child: Text("$taskType Description",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        )
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    //height: maxLines*24,
-                    width: 350,
-                    child: TextField(
-                      controller: descriptionController,
-                      //maxLines: maxLines,
-                     // cursorColor: Color(0xFF0F5298),
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                        ),
-                        labelText: 'Enter here...',
-                      ),
-                    ),
-                  ),
-
-                  //Toggled if item = expense:
-
-
-          //Question: Cost?
-                  //Title:
-                  if(taskType == 'Expense') Column(
-                    children:[
-                      Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: 15, top:25),
-                      child: Text("$taskType Cost",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          )
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 13, top: 10),
-                          child: Text('\$ ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(right: 20, top: 10),
-                          //height: 35,
-                          width: 350,
-                          child: TextField(
-                            controller: costController,
-                            // cursorColor: Color(0xFF0F5298),
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                              Container(
+                                margin: EdgeInsets.only(top:20, left: 15, right: 60),
+                                child:DropdownButton<String>(
+                                  value: taskType,
+                                  icon: const Icon(Icons.arrow_downward),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  style: const TextStyle(color: Color(0xFF0F5298)),
+                                  underline: Container(
+                                    height: 2,
+                                    color: Color(0xFF2565AE),
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      taskType = newValue!;
+                                    });
+                                  },
+                                  items: <String>['Task', 'Reminder', 'Expense']
+                                      .map<DropdownMenuItem<String>>((String value) {
+                                        if(value == "Expense"){
+                                          //TODO: Show/hide the Cost question
+                                        }
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                  }).toList(),
                                 ),
-                              labelText: 'Enter here...',
+                              ),
+                            ],
+                          ),
+
+                          //Divider line
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent:0,
+                                endIndent:0,
+                                color: Color(0xFF0F5298)
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                 ]),
 
-                  //Question #3: Due date?
-                  Container(
-                    margin: EdgeInsets.only(top:25),
-                    child: Row(
-                      children: [
-                        //Date Label:
-                        Container(
-                          margin: EdgeInsets.only(left: 20),
-                          height: 30,
-                          child: Text("Due Date:  ",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              )
-                          ),
-                        ),
-
-                        //Calendar Icon to pick:
-                        IconButton(
-                            onPressed: () => _selectDate(context),
-                            iconSize: 20,
-                            icon: Image.asset('assets/calendar_icon.png')
-                        ),
-
-                        //Place to display chosen date/time:
-                        Container(
-                          margin: EdgeInsets.only(left: 25),
-                          height: 30,
-                          width: 150,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: CupertinoColors.darkBackgroundGray),
-                              borderRadius: BorderRadius.all(Radius.circular(15))
-                          ),
-                          child: Text("${selectedDate.toLocal()}".split(' ')[0],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
+                          //Question 2: Description
+                          //Title:
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.only(left: 15, top:25),
+                            child: Text("$taskType Description",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                color: Colors.black
-                              )
+                                  fontSize: 18,
+                                )
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+                            //height: maxLines*24,
+                            width: 350,
+                            child: TextField(
+                              controller: descriptionController,
+                              //maxLines: maxLines,
+                             // cursorColor: Color(0xFF0F5298),
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                ),
+                                labelText: 'Enter here...',
+                              ),
+                            ),
+                          ),
+                          //Divider line
+                          Container(
+                            margin: EdgeInsets.only(top: 25),
+                            child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent:0,
+                                endIndent:0,
+                                color: Color(0xFF0F5298)
+                            ),
+                          ),
+                          //Toggled if item = expense:
+
+
+            //Question: Cost?
+                          //Title:
+                          if(taskType == 'Expense') Column(
+                            children:[
+                              Container(
+                              alignment: Alignment.topLeft,
+                              margin: EdgeInsets.only(left: 15, top:25),
+                              child: Text("$taskType Cost",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  )
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(left: 13, top: 10),
+                                  child: Text('\$ ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(right: 20, top: 10),
+                                  //height: 35,
+                                  width: 350,
+                                  child: TextField(
+                                    controller: costController,
+                                    // cursorColor: Color(0xFF0F5298),
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      labelText: 'Enter here...',
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                              //Divider line
+                              Container(
+                                margin: EdgeInsets.only(top: 25),
+                                child: Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    indent:0,
+                                    endIndent:0,
+                                    color: Color(0xFF0F5298)
+                                ),
+                              ),
+                         ]),
+
+                          //Question #3: Due date?
+                          Container(
+                            margin: EdgeInsets.only(top:25),
+                            child: Row(
+                              children: [
+                                //Date Label:
+                                Container(
+                                  margin: EdgeInsets.only(left: 20),
+                                  height: 30,
+                                  child: Text("Due Date:  ",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      )
+                                  ),
+                                ),
+
+                                //Calendar Icon to pick:
+                                IconButton(
+                                    onPressed: () => _selectDate(context),
+                                    iconSize: 20,
+                                    icon: Image.asset('assets/calendar_icon.png')
+                                ),
+
+                                //Place to display chosen date/time:
+                                Container(
+                                  margin: EdgeInsets.only(left: 25),
+                                  height: 30,
+                                  width: 150,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: CupertinoColors.darkBackgroundGray),
+                                      borderRadius: BorderRadius.all(Radius.circular(15))
+                                  ),
+                                  child: Text("${selectedDate.toLocal()}".split(' ')[0],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        color: Colors.black
+                                      )
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //Divider line
+                          Container(
+                            margin: EdgeInsets.only(top: 25),
+                            child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent:0,
+                                endIndent:0,
+                                color: Color(0xFF0F5298)
+                            ),
+                          ),
+
+                          //Submission button:
+                          Container(
+                            margin: EdgeInsets.only(top:40),
+                            width:100,
+                            child: ElevatedButton(
+                                onPressed: () => _createItem(context),
+                                child: Text(
+                                  'Done',
+                                  textAlign: TextAlign.center,
+                                )
+                            ),
+                          )
+
+                        ],
                   ),
-
-
-                  //Submission button:
-                  Container(
-                    margin: EdgeInsets.only(top:100),
-                    width:100,
-                    child: ElevatedButton(
-                        onPressed: () => _createItem(context),
-                        child: Text(
-                          'Done',
-                          textAlign: TextAlign.center,
-                        )
-                    ),
-                  )
-
-                ]
-    )
-        )
+              )
+        ),
     ])
         //Child #1: Title - What are we adding?
     ));

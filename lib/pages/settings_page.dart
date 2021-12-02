@@ -5,6 +5,7 @@ import '../../constants.dart' as Constants;
 import 'bottom_navigation/add_page.dart';
 import 'bottom_navigation/expenses_page.dart';
 import '../main.dart';
+import 'bottom_navigation/home_page.dart';
 
 class SettingsPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);

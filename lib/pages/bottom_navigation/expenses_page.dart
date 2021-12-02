@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'add_page.dart';
 import '../../main.dart';
 import '../../constants.dart' as Constants;
+import 'home_page.dart';
 
 
 class ExpensesPage extends StatefulWidget {
@@ -53,7 +54,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
               children: [
                 Container(
                     margin: EdgeInsets.only(left: 98),
-                    child: Text('')
+                    child: Text('Expenses')
                 ),
               ],
             ),

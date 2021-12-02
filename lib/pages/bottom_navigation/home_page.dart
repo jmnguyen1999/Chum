@@ -51,6 +51,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double remindersHeight = (90*allReminders.length).toDouble();
+    if(remindersHeight > 200){    //If we have enough reminders to fill up 200px, then just set fixed height
+      remindersHeight = 200;
+    }
     if(allReminders.length == 0 && allTasks.length == 0){
       /*print("no reminders or tasks yet");
       Task t = Task(id:-1, description: "Here's your first task: Create more!! :)", dueDate: DateTime.now());
@@ -216,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                         //Announcement Data:
                                         Container(
                                             width: 370,
-                                            //height: remindersHeight,
+                                            height: remindersHeight,
                                             decoration: BoxDecoration(
                                                 color: Colors.white38,
                                                 borderRadius: BorderRadius.all(Radius.circular(10))

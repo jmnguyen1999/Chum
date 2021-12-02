@@ -234,7 +234,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                                                           Container(
                                                                             margin: EdgeInsets.only(bottom: 5),
                                                                             child: Text(
-                                                                                '${expenses[index].getDescription()}',
+                                                                                '\$${expenses[index].getCost().toString()} - ${expenses[index].getDescription()}',
                                                                                 style: TextStyle(
                                                                                     fontWeight: FontWeight.bold,
                                                                                     fontSize:14

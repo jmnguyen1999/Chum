@@ -1,5 +1,6 @@
 
 import 'package:chum/models/items/expense.dart';
+import 'package:chum/models/items/reminder.dart';
 import 'package:chum/sqLite/database.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +91,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_EXPENSES, isEdit:false)));
+                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_EXPENSES, isEdit:false, isNew:false)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -166,7 +167,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                             child: IconButton(
                                                 onPressed: (){
                                                   Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_EXPENSES, isEdit:false)));
+                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false, isNew:true, selectedExpense: new Expense(id:0, description:"", cost: -1, dueDate:null),)));
                                                 },
                                                 icon: Icon(Icons.add_circle_outline)
                                             ),

@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false)));
+                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false, isNew:false)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                                             child: IconButton(
                                                 onPressed: (){
                                                   Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false)));
+                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false, isNew:true, selectedReminder: new Reminder(id:0, description:"", dueDate:null),)));
                                                 },
                                                 icon: Icon(Icons.add_circle_outline)
                                             ),
@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                                                   onTap: (){
                                                     print("ListTile tapped from homepage, sending task: " + allReminders[index].getDescription());
                                                     Navigator.push(context, MaterialPageRoute(
-                                                        builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedReminder:allReminders[index])));
+                                                        builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, isNew:false,selectedReminder:allReminders[index])));
                                                   },
                                                   title: Dismissible(
                                                     key: UniqueKey(),
@@ -337,13 +337,15 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                           ),
                                                           Spacer(),
+
+                                                          //Add button next to Date
                                                           Container(
                                                             alignment: Alignment.topRight,
                                                             margin: EdgeInsets.only(right: 8),
                                                             child: IconButton(
                                                                 onPressed: (){
                                                                   Navigator.push(context, MaterialPageRoute(
-                                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:false,)));
+                                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:false, isNew:true, selectedTask: new Task(id:0, description: "", dueDate: DateTime.parse(allTasks[row][0].getDate().toString())),)));
                                                                   },
                                                                 icon: Icon(Icons.add_circle_outline)
                                                             ),
@@ -366,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                                             onTap: (){
                                                               print("ListTile tapped from homepage, sending task: " + allTasks[row][col].getDescription());
                                                               Navigator.push(context, MaterialPageRoute(
-                                                                  builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, selectedTask:allTasks[row][col])));
+                                                                  builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, isNew: false, selectedTask:allTasks[row][col])));
                                                             },
                                                             title: Dismissible(
                                                               key: UniqueKey(),

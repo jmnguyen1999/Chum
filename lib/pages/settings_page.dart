@@ -62,7 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_INFO, isEdit: false)));
+                              builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_INFO, isEdit: false, isNew:false)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),

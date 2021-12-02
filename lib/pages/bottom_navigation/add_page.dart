@@ -17,7 +17,7 @@ import '../../constants.dart' as Constants;
 class AddPage extends StatefulWidget {
 
   //const HomePage({Key? key}) : super(key: key);
-  AddPage({Key? key, required this.title, required this.page_from, required this.isEdit, selectedTask, selectedReminder,selectedExpense}) :
+  AddPage({Key? key, required this.title, required this.page_from, required this.isEdit, required this.isNew, selectedTask, selectedReminder,selectedExpense}) :
         selectedTask = selectedTask ?? Task(id:-1, description:"null", dueDate: DateTime(1999)),
         selectedReminder = selectedReminder ?? Reminder(id:-3, description:"null", dueDate: DateTime(1999)),
         selectedExpense = selectedExpense ?? Expense(id:-2, description:"null", cost:0, dueDate: DateTime(1999)),
@@ -26,6 +26,7 @@ class AddPage extends StatefulWidget {
   final String title;
   final String page_from;
   bool isEdit;
+  bool isNew;         //Flag on whether or not to pre-fill info for a new item
   Task selectedTask;
   Reminder selectedReminder;
   Expense selectedExpense;
@@ -37,6 +38,34 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
 
+  @override
+  //Purpose:      If new item to begin from specific page, upload item type and date if needed
+  void initState() {
+    if(widget.isNew){
+      if(widget.selectedTask.getId() != -1){
+        print("was a task");
+        taskType = "Task";
+        if(widget.selectedTask.hasDueDate() && picked != selectedDate){
+          selectedDate = widget.selectedTask.getDate();
+        }
+      }
+      else if(widget.selectedExpense.getId() != -2){
+        print("was an expense");
+        taskType = "Expense";
+        if(widget.selectedExpense.hasDueDate() && picked != selectedDate){
+          selectedDate = widget.selectedExpense.getDate();
+        }
+      }
+      else{
+        print("was a reminder");
+        taskType = "Reminder";
+        if(widget.selectedReminder.hasDueDate() && picked != selectedDate){
+          selectedDate = widget.selectedReminder.getDate();
+        }
+      }
+    }
+    super.initState();
+  }
   String dropdownValue = 'One';
 
   //Values to store to create new Item:
@@ -66,6 +95,7 @@ class _AddPageState extends State<AddPage> {
 
   //Purpose: When creation of item is done, create an Item object and store it:
   _createItem(BuildContext context) {
+    bool noCostEntered = false;
     if (descriptionController.text != "") {
       //Get all data needed and make Item object:
       switch (taskType) {
@@ -100,7 +130,7 @@ class _AddPageState extends State<AddPage> {
           }
           break;
         case 'Expense':
-          if (costController.text != "") {
+          if (costController.text != "" && (double.tryParse(costController.text) != null)) {
             if (widget.isEdit) {
               Expense updatedExpense = new Expense(
                   id: widget.selectedExpense.getId(),
@@ -119,9 +149,19 @@ class _AddPageState extends State<AddPage> {
             }
           }
           else {
-            // Then show a snackbar.
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('Please fill out all areas.')));
+            // Then change flag to not navigate to back page
+
+            noCostEntered= true;
+            if(double.tryParse(costController.text) == null){
+              // Then show a snackbar.
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('Cost entered is not valid!')));
+            }
+            else{
+              // Then show a snackbar.
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('Please fill out all areas.')));
+            }
           }
           break;
         default:
@@ -129,29 +169,32 @@ class _AddPageState extends State<AddPage> {
       }
 
       //2.) Go back to the page came from passing along the new task
-      switch (widget.page_from) {
-        case Constants.KEY_HOME:
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => HomePage(title: widget.title)));
-          break;
-        case Constants.KEY_EXPENSES:
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => ExpensesPage(title: widget.title,)));
-          break;
-        case Constants.KEY_ADD:
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) =>
-                  AddPage(title: widget.title,
-                    page_from: widget.page_from,
-                    isEdit: widget.isEdit,
-                    selectedExpense: widget.selectedExpense,
-                    selectedTask: widget.selectedTask,
-                    selectedReminder: widget.selectedReminder,)));
-          break;
-        default:
-          print(
-              "add_page:  page_from was not valid, so did not navigate back from anywhere");
-          break;
+      if (!noCostEntered) {
+        switch (widget.page_from) {
+          case Constants.KEY_HOME:
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => HomePage(title: widget.title)));
+            break;
+          case Constants.KEY_EXPENSES:
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => ExpensesPage(title: widget.title,)));
+            break;
+          case Constants.KEY_ADD:
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) =>
+                    AddPage(title: widget.title,
+                      page_from: widget.page_from,
+                      isEdit: widget.isEdit,
+                      isNew:widget.isNew,
+                      selectedExpense: widget.selectedExpense,
+                      selectedTask: widget.selectedTask,
+                      selectedReminder: widget.selectedReminder,)));
+            break;
+          default:
+            print(
+                "add_page:  page_from was not valid, so did not navigate back from anywhere");
+            break;
+        }
       }
     }
     else{
@@ -164,7 +207,6 @@ class _AddPageState extends State<AddPage> {
   //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
-    final maxLines = 3;
 
     //If we are editing something, pre-fill values
     if (widget.isEdit) {
@@ -247,7 +289,7 @@ class _AddPageState extends State<AddPage> {
                     child: IconButton(
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => AddPage(title: widget.title, page_from: widget.page_from,isEdit: widget.isEdit, selectedExpense: widget.selectedExpense, selectedTask: widget.selectedTask, selectedReminder: widget.selectedReminder,)));
+                              builder: (context) => AddPage(title: widget.title, page_from: widget.page_from,isEdit: widget.isEdit, isNew: widget.isNew, selectedExpense: widget.selectedExpense, selectedTask: widget.selectedTask, selectedReminder: widget.selectedReminder,)));
                         },
                         icon: Icon(Icons.add_circle_outline, color: Colors.white)
                     ),
@@ -368,35 +410,40 @@ class _AddPageState extends State<AddPage> {
                   ),
 
                   //Toggled if item = expense:
+
+
           //Question: Cost?
                   //Title:
-                  Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(left: 15, top:25),
-                    child: Text("$taskType Cost",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        )
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    //height: 35,
-                    width: 350,
-                    child: TextField(
-                      controller: costController,
-                      // cursorColor: Color(0xFF0F5298),
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          ),
-                        labelText: 'Enter here...',
+                  if(taskType == 'Expense') Column(
+                    children:[
+                      Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 15, top:25),
+                      child: Text("$taskType Cost",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          )
                       ),
                     ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.only(left: 20, right: 20, top: 10),
+                      //height: 35,
+                      width: 350,
+                      child: TextField(
+                        controller: costController,
+                        // cursorColor: Color(0xFF0F5298),
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            ),
+                          labelText: 'Enter here...',
+                        ),
+                      ),
+                    )
+                 ]),
 
                   //Question #3: Due date?
                   Container(

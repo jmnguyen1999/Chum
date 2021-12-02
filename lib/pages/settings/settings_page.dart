@@ -6,6 +6,7 @@ import '../bottom_navigation/add_page.dart';
 import '../bottom_navigation/expenses_page.dart';
 import '../../main.dart';
 import '../bottom_navigation/home_page.dart';
+import 'about_page.dart';
 import 'help_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -194,7 +195,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                             ),
                                             Spacer(),
                                             IconButton(
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                  Navigator.push(context, MaterialPageRoute(
+                                                      builder: (context) => AboutPage(title: widget.title)));
+                                                },
                                                 icon: Icon(Icons.arrow_forward_ios)
                                             )
                                           ]

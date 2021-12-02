@@ -183,16 +183,26 @@ class _HomePageState extends State<HomePage> {
                       //Child #3: Whole bulk of page:
                         Column(
                               children: [
-
-                                //Child #3a: Announcements - Column
+                              //Divider
+                                  Container(
+                                    margin: EdgeInsets.only(top: 35, left:20, right:20),
+                                    child: Divider(
+                                        height: 1,
+                                        thickness: 2,
+                                        indent:0,
+                                        endIndent:0,
+                                        color: /*Color(0xFF3C99DC)*/Colors.black
+                                    ),
+                                  ),
+                                //Child #3a: Reminders - Column
                                 Column(
                                     children: [
-                                      //Announcement Label:
+                                      //Reminder Label:
                                       Row(
                                         children: [
                                           Container(
                                             alignment: Alignment.topLeft,
-                                            margin: EdgeInsets.only(left: 20, top: 5),
+                                            margin: EdgeInsets.only(left: 20),
                                             child: Text('Reminders',
                                                 style: TextStyle(
                                                     fontSize: 26,
@@ -299,9 +309,22 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ]
                                 ),
+
+                                //Divider between Tasks and Reminders section:
+                                Container(
+                                    margin: EdgeInsets.only(top: 35, left:20, right:20),
+                                    child: Divider(
+                                        height: 1,
+                                        thickness: 2,
+                                        indent:0,
+                                        endIndent:0,
+                                        color: /*Color(0xFF3C99DC)*/Colors.black
+                                    ),
+                                ),
+
                                 Container(
                                   alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.only(left: 20, top: 30),
+                                  margin: EdgeInsets.only(left: 20, top: 20),
                                   child: Text('Tasks:',
                                       style: TextStyle(
                                         fontSize: 26,
@@ -318,8 +341,10 @@ class _HomePageState extends State<HomePage> {
                                         itemBuilder: (BuildContext context, int row) {
 
                                           //Transparent box to capture label and data:
-                                            return Container(
-                                                margin: EdgeInsets.only(),
+                                            return Column(
+                                              children:[
+                                            Container(
+                                                margin: EdgeInsets.only(bottom: 10),
                                                 child: Column(
                                                     children: [
 
@@ -333,6 +358,7 @@ class _HomePageState extends State<HomePage> {
                                                             child: Text(allTasks[row][0].getDateString(),
                                                                 style: TextStyle(
                                                                   fontSize: 16,
+                                                                  fontWeight: FontWeight.bold
                                                                 )
                                                             ),
                                                           ),
@@ -356,10 +382,12 @@ class _HomePageState extends State<HomePage> {
                                                       //2.) Day Data:
                                                       //Transparent container since every task is in own box:
                                                       Container(
+                                                        margin: EdgeInsets.only(),
                                                         width: 370,
-                                                        height: 80.0*(allTasks[row].length),
+                                                        //height: 70.0*(allTasks[row].length),
 
                                                         child: ListView.builder(
+                                                          shrinkWrap: true,
                                                           itemCount: allTasks[row].length,
                                                           itemBuilder: (BuildContext context, int col){
                                                             final task = allTasks[row][col];
@@ -387,51 +415,67 @@ class _HomePageState extends State<HomePage> {
                                                                 width: 370,
                                                                 //height: 45,
                                                                 margin: EdgeInsets.only(top: 5),
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors.white38,
-                                                                    borderRadius: BorderRadius.all(Radius.circular(20))
-                                                                ),
+                                                                decoration:
+                                                                  BoxDecoration(
+                                                                      color: Colors.white38,
+                                                                      borderRadius: BorderRadius.all(Radius.circular(20))
+                                                                  ),
                                                                 child:
-                                                                Container(
-                                                                  margin: EdgeInsets.only(top: 5, bottom: 5, right: 15),
-                                                                  child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      margin: EdgeInsets.only(left: 15, right: 10),
-                                                                      width: 30,
-                                                                      height: 30,
-                                                                      child:
-                                                                        Checkbox(
-                                                                          checkColor: Colors.white,
-                                                                          fillColor: MaterialStateProperty.resolveWith(getColor),
-                                                                          value: allTasks[row][col].getIsDone(),
-                                                                          onChanged: (bool? value) {
-                                                                            setState(() {
-                                                                              allTasks[row][col].isDone = value!;
-                                                                            });
-                                                                          },
-                                                                        )
-                                                                    ),
+                                                                  Container(
+                                                                    margin: EdgeInsets.only(top: 5, bottom: 5, right: 15),
+                                                                    child: Row(
+                                                                          children: [
+                                                                            Container(
+                                                                              margin: EdgeInsets.only(left: 15, right: 10),
+                                                                              width: 30,
+                                                                              height: 30,
+                                                                              child:
+                                                                                Checkbox(
+                                                                                  checkColor: Colors.white,
+                                                                                  fillColor: MaterialStateProperty.resolveWith(getColor),
+                                                                                  value: allTasks[row][col].getIsDone(),
+                                                                                  onChanged: (bool? value) {
+                                                                                    setState(() {
+                                                                                      allTasks[row][col].isDone = value!;
+                                                                                    });
+                                                                                  },
+                                                                                )
+                                                                            ),
 
-                                                                    Flexible(
-                                                                      child: Text(
-                                                                        '${allTasks[row][col].getDescription()}',
-                                                                        style: TextStyle(
-                                                                          fontSize: 15,
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                '${allTasks[row][col].getDescription()}',
+                                                                                style: TextStyle(
+                                                                                  fontSize: 15,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          ]
                                                                         ),
-                                                                      ),
-                                                                    )
-                                                                  ]
                                                                   )
-                                                                )
                                                               ),
                                                             ),
+
                                                           );
                                                           }
                                                         )
                                                         )
                                                     ]),
-                                              );
+                                              ),
+
+
+                                            //Divider line below task days:
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10, left:30, right:30, bottom: 10),
+                                              child: Divider(
+                                                  height: 1,
+                                                  thickness: 1,
+                                                  indent:0,
+                                                  endIndent:0,
+                                                  color: Color(0xFF0F5298)
+                                              ),
+                                            )
+                                          ]);
                                         })
   ]
     )

@@ -30,7 +30,6 @@ class _ExpensesPageState extends State<ExpensesPage> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     getExpenses();
     super.initState();
   }
@@ -136,7 +135,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                           Row(
                               children: [
                                 Container(
-                                  margin: EdgeInsets.only(left: 20, top: 50),
+                                  margin: EdgeInsets.only(left: 20, top: 15),
                                   child: Text(
                                     'Your Expenses...',
                                     style: TextStyle(
@@ -146,36 +145,29 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                     ),
                                   ),
                                 ),
-                              ]
-                          ),
+                              Spacer(),
+                              Container(
+                                alignment: Alignment.topRight,
+                                margin: EdgeInsets.only(right: 8, top: 25),
+                                child: IconButton(
+                                    onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false, isNew:true, selectedExpense: new Expense(id:0, description:"", cost: -1, dueDate:null),)));
+                                    },
+                                    icon: Icon(Icons.add_circle_outline)
+                                ),
+                              ),
+                          ]),
 
 
                           //Child #3: Whole bulk of page:
                           Column(
                               children: [
 
-                                //Child #3a: Announcements - Column
+                                //Child #3a: Expenses - Column
                                 Column(
                                     children: [
-                                      //Announcement Label:
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            alignment: Alignment.topRight,
-                                            margin: EdgeInsets.only(right: 8, top: 10),
-                                            child: IconButton(
-                                                onPressed: (){
-                                                  Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit: false, isNew:true, selectedExpense: new Expense(id:0, description:"", cost: -1, dueDate:null),)));
-                                                },
-                                                icon: Icon(Icons.add_circle_outline)
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      //Announcement Data:
+                                      //Expenses data
                                       Container(
                                           width: 370,
                                           height: 450,
@@ -191,71 +183,78 @@ class _ExpensesPageState extends State<ExpensesPage> {
                                               itemCount: expenses.length,
                                               itemBuilder: (BuildContext context, int index){
                                                 final expense = expenses[index].getDescription();
-                                                return Dismissible(
-                                                  key: UniqueKey(),
-                                                  onDismissed: (direction) {
-                                                    print("reminder id to delete: " + expenses[index].getId().toString());
-                                                    DatabaseHelper.instance.deleteExpense(expenses[index].getId());
-                                                    setState(() {
-                                                      expenses.removeAt(index);
-                                                    });
-                                                    // Then show a snackbar.
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(content: Text('$expense deleted')));
+                                                return ListTile(
+                                                  onTap: (){
+                                                    print("ListTile tapped from homepage, sending task: " + expenses[index].getDescription());
+                                                    Navigator.push(context, MaterialPageRoute(
+                                                        builder: (context) => AddPage(title: widget.title, page_from: Constants.KEY_HOME, isEdit:true, isNew:false, selectedExpense:expenses[index])));
                                                   },
-                                                  background: Container(color: Color(0xFF2565AE)),
-                                                  child: Container(
-                                                      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                                                      child: Column(
-                                                          children: [
-                                                            Row(
-                                                                children: [
-                                                                  Checkbox(
-                                                                    checkColor: Colors.white,
-                                                                    fillColor: MaterialStateProperty.resolveWith(getColor),
-                                                                    value: expenses[index].getIsDone(),
-                                                                    onChanged: (bool? value) {
-                                                                      setState(() {
-                                                                        expenses[index].isDone = value!;
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Container(
-                                                                        margin: EdgeInsets.only(bottom: 5),
-                                                                        child: Text(
-                                                                            '${expenses[index].getDescription()}',
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontSize:14
-                                                                            )
+                                                  title: Dismissible(
+                                                    key: UniqueKey(),
+                                                    onDismissed: (direction) {
+                                                      print("reminder id to delete: " + expenses[index].getId().toString());
+                                                      DatabaseHelper.instance.deleteExpense(expenses[index].getId());
+                                                      setState(() {
+                                                        expenses.removeAt(index);
+                                                      });
+                                                      // Then show a snackbar.
+                                                      ScaffoldMessenger.of(context)
+                                                          .showSnackBar(SnackBar(content: Text('$expense deleted')));
+                                                    },
+                                                    background: Container(color: Color(0xFF2565AE)),
+                                                    child: Container(
+                                                        margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                                                        child: Column(
+                                                            children: [
+                                                              Row(
+                                                                  children: [
+                                                                    Checkbox(
+                                                                      checkColor: Colors.white,
+                                                                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                                                                      value: expenses[index].getIsDone(),
+                                                                      onChanged: (bool? value) {
+                                                                        setState(() {
+                                                                          expenses[index].isDone = value!;
+                                                                        });
+                                                                      },
+                                                                    ),
+                                                                    Column(
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: [
+                                                                        Container(
+                                                                          margin: EdgeInsets.only(bottom: 5),
+                                                                          child: Text(
+                                                                              '${expenses[index].getDescription()}',
+                                                                              style: TextStyle(
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontSize:14
+                                                                              )
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                      Text('Due date: ${expenses[index].getDateString()}',
-                                                                        style: TextStyle(
-                                                                            fontSize: 12,
-                                                                            color: Colors.grey
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  )
-                                                                ]
-                                                            ),
-
-                                                            Container(
-                                                              margin: EdgeInsets.only(top: 10),
-                                                              child: Divider(
-                                                                  height: 2,
-                                                                  thickness: 0.5,
-                                                                  indent:0,
-                                                                  endIndent:0,
-                                                                  color: Color(0xFF3C99DC)
+                                                                        Text('Due date: ${expenses[index].getDateString()}',
+                                                                          style: TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: Colors.grey
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    )
+                                                                  ]
                                                               ),
-                                                            )
-                                                          ]
-                                                      )
+
+                                                              Container(
+                                                                margin: EdgeInsets.only(top: 10),
+                                                                child: Divider(
+                                                                    height: 2,
+                                                                    thickness: 0.5,
+                                                                    indent:0,
+                                                                    endIndent:0,
+                                                                    color: Color(0xFF3C99DC)
+                                                                ),
+                                                              )
+                                                            ]
+                                                        )
+                                                    ),
                                                   ),
                                                 );
                                               })

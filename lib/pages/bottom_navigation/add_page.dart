@@ -427,21 +427,34 @@ class _AddPageState extends State<AddPage> {
                           )
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //height: 35,
-                      width: 350,
-                      child: TextField(
-                        controller: costController,
-                        // cursorColor: Color(0xFF0F5298),
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 13, top: 10),
+                          child: Text('\$ ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24
                             ),
-                          labelText: 'Enter here...',
+                          ),
                         ),
-                      ),
+                        Container(
+                          margin: EdgeInsets.only(right: 20, top: 10),
+                          //height: 35,
+                          width: 350,
+                          child: TextField(
+                            controller: costController,
+                            // cursorColor: Color(0xFF0F5298),
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                ),
+                              labelText: 'Enter here...',
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                  ]),
 

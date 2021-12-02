@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../settings_page.dart';
+import '../settings/settings_page.dart';
 import 'expenses_page.dart';
 import '../../main.dart';
 
@@ -248,13 +248,13 @@ class _AddPageState extends State<AddPage> {
                 Container(
                     margin: EdgeInsets.only(left: 72),
                     child: Text('Add New Item')),
-               /* Spacer(),
+                Spacer(),
                 IconButton(onPressed: (){
                   print("You pushed the settings button");
                   Navigator.push(context, MaterialPageRoute(
                       builder: (context) => SettingsPage(title: widget.title)));
                 },
-                    icon: Icon(Icons.view_headline_outlined))*/
+                    icon: Icon(Icons.view_headline_outlined))
               ],
             ),
             backgroundColor: Color(0xFF3C99DC),

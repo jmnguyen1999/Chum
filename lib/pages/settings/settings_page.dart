@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../constants.dart' as Constants;
-import 'bottom_navigation/add_page.dart';
-import 'bottom_navigation/expenses_page.dart';
-import '../main.dart';
-import 'bottom_navigation/home_page.dart';
+import '../../../constants.dart' as Constants;
+import '../bottom_navigation/add_page.dart';
+import '../bottom_navigation/expenses_page.dart';
+import '../../main.dart';
+import '../bottom_navigation/home_page.dart';
+import 'help_page.dart';
 
 class SettingsPage extends StatefulWidget {
   //const HomePage({Key? key}) : super(key: key);
@@ -116,7 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               width: 30,
                                               height: 30,
                                               child: IconButton(
-                                                icon: Icon(Icons.account_balance),
+                                                icon: Icon(Icons.info_outlined),
                                                 onPressed: () {  },
                                               ),
                                             ),
@@ -127,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 Container(
                                                   //margin: EdgeInsets.only(bottom: 5),
                                                   child: Text(
-                                                      'General',
+                                                      'Help',
                                                       style: TextStyle(
                                                           fontSize:16
                                                       )
@@ -137,7 +138,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                             ),
                                             Spacer(),
                                             IconButton(
-                                                onPressed: (){},
+                                                onPressed: (){
+                                                  Navigator.push(context, MaterialPageRoute(
+                                                      builder: (context) => HelpPage(title: widget.title)));
+                                                },
                                                 icon: Icon(Icons.arrow_forward_ios)
                                             )
                                           ]
@@ -169,7 +173,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               width: 30,
                                               height: 30,
                                               child:  IconButton(
-                                                icon: Icon(Icons.group),
+                                                icon: Icon(Icons.wb_incandescent_outlined)/*Icon(Icons.group)*/,
                                                 onPressed: () {  },
                                               ),
                                             ),
@@ -180,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 Container(
                                                   //margin: EdgeInsets.only(bottom: 5),
                                                   child: Text(
-                                                      'Roles',
+                                                      'About',
                                                       style: TextStyle(
                                                           fontSize:16
                                                       )
@@ -210,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
 
                             //For Leave Group Option:
-                            Container(
+                           /* Container(
                                 margin: EdgeInsets.only(left: 30, right: 30, top: 10),
                                 child: Column(
                                     children: [
@@ -255,7 +259,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       )
                                     ]
                                 )
-                            ),
+                            ),*/
                           ]
                       )
                   )

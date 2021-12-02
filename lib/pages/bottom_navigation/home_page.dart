@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart' as Constants;
+import '../settings/settings_page.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
 
@@ -79,6 +80,13 @@ class _HomePageState extends State<HomePage> {
               Container(
                   child: Text('Home')
               ),
+              Spacer(),
+              IconButton(onPressed: (){
+                print("You pushed the settings button");
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => SettingsPage(title: widget.title)));
+              },
+                  icon: Icon(Icons.view_headline_outlined))
             ],
           ),
           backgroundColor: Color(0xFF3C99DC),
@@ -136,10 +144,8 @@ class _HomePageState extends State<HomePage> {
                   colors: [
                     Color(0xFFFFFFFF),
                     Color(0xFFD5F3FE),
-                    //Color(0xFF66D3FA),
                     Color(0xFF3C99DC),
                     Color(0xFF2565AE)
-                    //Color(0xFF2565AE),
                   ],
                 )
             ),

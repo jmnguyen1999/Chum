@@ -1,16 +1,18 @@
-
-
 import 'package:chum/models/items/reminder.dart';
 import 'package:chum/models/items/task.dart';
 import 'package:chum/sqLite/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../constants.dart' as Constants;
 import '../settings/settings_page.dart';
 import 'add_page.dart';
 import 'expenses_page.dart';
 
+/*
+expense_page.dart
+Purpose:              The page to display and order all Expense objects in the database.
+Correlated files:     database.dart, add_part.dart
+*/
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -21,9 +23,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<List<Task>> allTasks = [];
   List<Reminder> allReminders = [];
-  List<bool> _isChecked = [];
   int numTasks = 0;
 
+  //Purpose:    Get all Task objects from the database. Ensure they are ordered and initialize allTasks
   void getTasks() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllTasks();
     List<Task> listTasks = [];
@@ -33,6 +35,8 @@ class _HomePageState extends State<HomePage> {
       print("Task list from getTasks(): " + allTasks.toString());
     });
   }
+
+  //Purpose:    Get all Reminder objects from the database. Ensure they are ordered and initialize allReminders
   void getReminders() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllReminders();
     setState(() {
@@ -41,6 +45,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+
+  //Purpose:    Gets called before the page is displayed, calls getTasks() and getReminders() to initialize allTasks and allReminders
   @override
   void initState() {
     getTasks();
@@ -48,22 +54,28 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+
+  //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
-    double remindersHeight = (90*allReminders.length).toDouble();
+    double remindersHeight = (90*allReminders.length).toDouble();         //Determines if the Reminder's container to display Reminders should be fixed.
     if(remindersHeight > 200){    //If we have enough reminders to fill up 200px, then just set fixed height
       remindersHeight = 200;
     }
+
+    //In the case there are no Reminders or Tasks, create a fixed size for Reminders to show an empty container for new items
     if(allReminders.length == 0 && allTasks.length == 0){
-      /*print("no reminders or tasks yet");
+      remindersHeight = 100;
+
+      /*To also display a fixed size container for Tasks
       Task t = Task(id:-1, description: "Here's your first task: Create more!! :)", dueDate: DateTime.now());
       List<Task> tt = [t];
       allTasks.add(tt);
       remindersHeight = 70;
       allReminders.add(Reminder(id: -1, description: "You have no reminders!"));*/
-      remindersHeight = 100;
     }
 
+    //Purpose:    Set colors for checkboxes for all interaction.
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -76,7 +88,9 @@ class _HomePageState extends State<HomePage> {
       return Color(0xFF0F5298);
     }
 
+    //Format the page:
     return Scaffold(
+      //----------------------App Bar--------------------------------------
         appBar: AppBar(
           title: Row(
             children: [
@@ -84,6 +98,8 @@ class _HomePageState extends State<HomePage> {
                   child: Text('Home')
               ),
               Spacer(),
+
+              //settings icon + event
               IconButton(onPressed: (){
                 print("You pushed the settings button");
                 Navigator.push(context, MaterialPageRoute(
@@ -95,6 +111,8 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Color(0xFF3C99DC),
         ),
         backgroundColor: Color(0xFFD5F3FE),
+
+        //------------------------Configure the bottom nav bar with same buttons + events.------------------
         bottomNavigationBar: Container(
           height: 50,
           child: BottomAppBar(
@@ -112,7 +130,9 @@ class _HomePageState extends State<HomePage> {
                         icon: Icon(Icons.home_filled, color: Colors.white)
                     ),
                   ),
-                  //3.) Add Icon: Add Dialog page - TODO
+
+
+                  //2.) Add Icon: Add Dialog page - TODO
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -123,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
+                  //3.) Money Icon: ExpensesPage - TODO: fix overflow
                   Expanded(
                     child: IconButton(
                         onPressed: () {
@@ -140,6 +160,7 @@ class _HomePageState extends State<HomePage> {
 
 
         body: Container(
+          //Background color gradient:
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,

@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart' as Constants;
 import '../bottom_navigation/add_page.dart';
 import '../bottom_navigation/expenses_page.dart';
-import '../../main.dart';
 import '../bottom_navigation/home_page.dart';
 import 'about_page.dart';
 import 'help_page.dart';
 
+/*
+settings_page.dart
+Purpose:      Configures the settings page, links to the help_page and about_page. This page can be accessed from the app bar from any screen.
+
+ */
 class SettingsPage extends StatefulWidget {
-  //const HomePage({Key? key}) : super(key: key);
   SettingsPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
@@ -23,6 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+        //-------------------------App bar---------------------------
         appBar: AppBar(
             title: Row(
               children: [
@@ -35,13 +39,15 @@ class _SettingsPageState extends State<SettingsPage> {
             backgroundColor: Color(0xFF3C99DC),
             leading: new IconButton(
                 icon: new Icon(Icons.arrow_back_ios_outlined),
-                onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
+                onPressed: ()
                 {
                   Navigator.of(context).pop();
                 }
             )
         ),
         backgroundColor: Color(0xFFD5F3FE),
+
+        //------------------------Bottom nav bar-----------------------------------
         bottomNavigationBar: Container(
           height: 50,
           child: BottomAppBar(
@@ -60,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
 
-                  //3.) Add Icon: Add Dialog page - TODO
+                  //2.) Add Icon: Add Dialog page - TODO
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -71,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
 
-                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
+                  //3.) Money Icon: ExpensesPage - TODO: fix overflow
                   Expanded(
                     child: IconButton(
                         onPressed: () {

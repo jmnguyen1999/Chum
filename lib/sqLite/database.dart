@@ -1,12 +1,14 @@
 import 'dart:io';
-
-import 'package:chum/models/items/task.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
+/*
+database.dart
+Purpose:      Handle SQLite, creates the database file system in the phone thorough specified tables and queries for Reminder, Task, and Expense objects.
+              Also in charge of implementation of methods to easily update/create new rows in database.
+ */
 class DatabaseHelper {
-
   static final _databaseName = "ChumDatabase.db";
   static final _databaseVersion = 1;
 
@@ -33,12 +35,15 @@ class DatabaseHelper {
   static final DatabaseHelper instance = new DatabaseHelper._privateConstructor();
 
   Database? _database;
+
+  //Purpose:    Initialize the database asynchronously
   Future<Database?> get database async {
     if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
   }
 
+  //Purpose:    Initialize the database asynchronously
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
@@ -47,7 +52,7 @@ class DatabaseHelper {
         onCreate: _onCreate);
   }
 
-
+  //Purpose:    Create the Task, Reminder, Expense table upon database creation.
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $taskTable (
@@ -71,6 +76,8 @@ class DatabaseHelper {
        )''');
   }
 
+
+  //-----------Insert item into database methods-----------------------
   Future<int> insertTask(Map<String, dynamic> row) async {
     Database? db = await instance.database;
     return await db!.insert(taskTable, row);
@@ -85,6 +92,9 @@ class DatabaseHelper {
     Database? db = await instance.database;
     return await db!.insert(expenseTable, row);
   }
+
+
+  //--------------Query for all rows of item methods---------------------
   Future<List<Map<String, dynamic>>> queryAllTasks() async {
     Database? db = await instance.database;
     var result = await db!.rawQuery("SELECT * FROM task_table ORDER BY task_due_date");
@@ -106,7 +116,7 @@ class DatabaseHelper {
     return result.toList();
   }
 
-
+  //----------------Query for count of rows for item methods --------------------------
   Future<int> queryTaskCount() async {
     Database? db = await instance.database;
     return Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT(*) FROM $taskTable'));
@@ -120,7 +130,7 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT(*) FROM $expenseTable'));
   }
 
-
+  //---------------------Update given row of item methods --------------------------------
   Future<int> updateTask(Map<String, dynamic> row) async {
     Database? db = await instance.database;
     int id = row[taskId];
@@ -138,6 +148,7 @@ class DatabaseHelper {
   }
 
 
+  //---------------------Delete given row of item methods-----------------
   Future<int> deleteTask(int id) async {
     Database? db = await instance.database;
     return await db!.delete(taskTable, where: '$taskId = ?', whereArgs: [id]);

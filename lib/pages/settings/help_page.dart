@@ -4,9 +4,12 @@ import 'package:chum/pages/bottom_navigation/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart' as Constants;
-class HelpPage extends StatefulWidget {
-  //const HelpPage({Key? key}) : super(key: key);
 
+/*
+help_page.dart
+Purpose:      Displays information about Help. How to use chum. No actual functionality other than displaying Strings. Linked to settings_page
+ */
+class HelpPage extends StatefulWidget {
   HelpPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override

@@ -1,18 +1,19 @@
 
 import 'package:chum/models/items/expense.dart';
-import 'package:chum/models/items/reminder.dart';
 import 'package:chum/sqLite/database.dart';
 import 'package:flutter/material.dart';
-
 import '../settings/settings_page.dart';
 import 'add_page.dart';
-import '../../main.dart';
 import '../../constants.dart' as Constants;
 import 'home_page.dart';
 
-
+/*
+expense_page.dart
+Purpose:              The page to display and order all Expense objects in the database.
+Correlated files:     database.dart, add_part.dart
+*/
 class ExpensesPage extends StatefulWidget {
-  //const HomePage({Key? key}) : super(key: key);
+  //Constructor: pass in app name title
   ExpensesPage({Key? key, required this.title}) : super(key: key);
   final String title;
   @override
@@ -23,6 +24,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
 
   List<Expense> expenses = <Expense>[];
 
+  //Purpose:    Get all Expense objects from the database.
   void getExpenses() async {
     List<Map<String, dynamic>> listMap = await DatabaseHelper.instance.queryAllExpenses();
     setState(() {
@@ -30,13 +32,19 @@ class _ExpensesPageState extends State<ExpensesPage> {
       print("expenses from getExpense(): " + expenses.toString());
     });
   }
+
+  //Purpose:    Gets called before the page is displayed, obtains list of Expense objects to display.
   @override
   void initState() {
     getExpenses();
     super.initState();
   }
+
+  //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
+
+    //Purpose:    Set colors for checkboxes for all interaction.
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -49,7 +57,10 @@ class _ExpensesPageState extends State<ExpensesPage> {
       return Color(0xFF0F5298);
     }
 
+    //Format the page:
     return Scaffold(
+
+      //----------------------App Bar--------------------------------------
         appBar: AppBar(
             title: Row(
               children: [
@@ -58,6 +69,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     child: Text('Expenses')
                 ),
                 Spacer(),
+
+                //settings icon + event
                 IconButton(onPressed: (){
                   print("You pushed the settings button");
                   Navigator.push(context, MaterialPageRoute(
@@ -67,6 +80,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
               ],
             ),
             backgroundColor: Color(0xFF3C99DC),
+
+            //Back icon --> go to the page that called us.
             leading: new IconButton(
                 icon: new Icon(Icons.arrow_back_ios_outlined),
                 onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
@@ -75,6 +90,8 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 }
             )
         ),
+
+        //Configure the bottom nav bar with same buttons + events.
         backgroundColor: Color(0xFFD5F3FE),
         bottomNavigationBar: Container(
           height: 50,
@@ -94,7 +111,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     ),
                   ),
 
-                  //3.) Add Icon: Add Dialog page - TODO
+                  //2.) Add Icon: Add Dialog page
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -105,7 +122,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                     ),
                   ),
 
-                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
+                  //3.) Money Icon: ExpensesPage
                   Expanded(
                     child: IconButton(
                         onPressed: () {
@@ -120,7 +137,11 @@ class _ExpensesPageState extends State<ExpensesPage> {
           ),
         ),
 
+
+
+
         body: Container(
+          //Background color gradient:
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -141,7 +162,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
                   child: SingleChildScrollView(
                       child: Column(
                           children: [
-                            //Child #1: Title - What are we adding?
+                            //Child #1: Title - Your Expenses
                             Row(
                                 children: [
                                   Container(

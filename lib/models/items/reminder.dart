@@ -1,15 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+/*
+  reminder.dart
+  Purpose:                Model class to encapsulate all data regarding a Reminder item. A Reminder item is an item to display with a description and possible due date.
+  Correlated File:        Used with add_page.dart, home_page.dart, database.dart
+ */
 
 class Reminder{
   int id;
   String description;
   DateTime dueDate;
 
+  //Purpose:  Constructor, dueDate optional w/default values
   Reminder({required this.id, required this.description, dueDate}) :
         this.dueDate = dueDate ?? DateTime(1999);
 
-  //to be used when inserting a row in the table
+  //Purpose:  to be used when inserting a row in the database table, creates a database row from an Reminder object without an actual valid id. (b/c has yet to be in database)
   Map<String, dynamic> toMapWithoutId() {
     final map = new Map<String, dynamic>();
     map["reminder_description"] = description;
@@ -17,7 +23,7 @@ class Reminder{
     return map;
   }
 
-  //to be used when updating a row in the table
+  //Purpose:  to be used to convert a Reminder object into a row in the database
   Map<String, dynamic> toMap() {
     final map = new Map<String, dynamic>();
     map["reminder_id"] = id;
@@ -26,24 +32,13 @@ class Reminder{
     return map;
   }
 
-  //to be used when converting the row into object
+  ////Purpose: to be used when converting a given database row into a Reminder object
   factory Reminder.fromMap(Map<String, dynamic> data) => new Reminder(
     id: data['reminder_id'],
     description: data['reminder_description'],
     dueDate: DateTime.parse(data['reminder_due_date']),
   );
 
-
-  /*List<Reminder> to1DList(List<List<Reminder>> listOfLists){
-    List<Reminder> result = [];
-    for(int row = 0 ; row < listOfLists.length; row++){
-      List<Reminder> currRow = listOfLists[row];
-      for(int col = 0; col <currRow.length; col++){
-        result.add(currRow[col]);
-      }
-    }
-    return result;
-  }*/
 
   //Getter methods:
   int getId(){

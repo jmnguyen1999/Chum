@@ -1,24 +1,23 @@
-import 'package:chum/add_dialog.dart';
 import 'package:chum/models/items/expense.dart';
 import 'package:chum/models/items/reminder.dart';
 import 'package:chum/models/items/task.dart';
 import 'package:chum/sqLite/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../settings/settings_page.dart';
 import 'expenses_page.dart';
-import '../../main.dart';
-
 import '../../constants.dart' as Constants;
 import 'home_page.dart';
 
-//Purpose:  Given the Circle, we have access to all Tasks, Announcements, Reminders, and Expenses. We will update this Circle object and send it back to whoever called this page (us)
+/*
+add_page.dart
+Purpose:  The page displayed to create or edit items (Tasks, Reminders, or Expenses). Takes in optional items if the passed in isEdit = true. Allows partial data population if the passed
+          in isNew = true. isNew = true means we have been given an empty item to populate the taskType and possible dueDate.
+*/
 class AddPage extends StatefulWidget {
-
-  //const HomePage({Key? key}) : super(key: key);
+  //Constructor --> tell us what page came from, whether or not we are editing an existing item, whether or not we are editing an empty item (isNew = true). If item not passed in --> default values used & checked during runtime.
   AddPage({Key? key, required this.title, required this.page_from, required this.isEdit, required this.isNew, selectedTask, selectedReminder,selectedExpense}) :
+        //If these are null --> fill w/ invalid data to check later.
         selectedTask = selectedTask ?? Task(id:-1, description:"null", dueDate: DateTime(1999)),
         selectedReminder = selectedReminder ?? Reminder(id:-3, description:"null", dueDate: DateTime(1999)),
         selectedExpense = selectedExpense ?? Expense(id:-2, description:"null", cost:0, dueDate: DateTime(1999)),
@@ -27,11 +26,10 @@ class AddPage extends StatefulWidget {
   final String title;
   final String page_from;
   bool isEdit;
-  bool isNew;         //Flag on whether or not to pre-fill info for a new item
+  bool isNew;                   //Flag on whether or not to pre-fill info for a new item
   Task selectedTask;
   Reminder selectedReminder;
   Expense selectedExpense;
-
 
   @override
   _AddPageState createState() => _AddPageState();
@@ -40,7 +38,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
 
   @override
-  //Purpose:      If new item to begin from specific page, upload item type and date if needed
+  //Purpose:  If we are starting a new item fromm specific page, populate the item type and date if needed
   void initState() {
     if(widget.isNew){
       if(widget.selectedTask.getId() != -1){
@@ -72,20 +70,23 @@ class _AddPageState extends State<AddPage> {
   //Values to store to create new Item:
   String taskType = 'Task';
   String description = "";
-
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController costController = TextEditingController();
-
   DateTime selectedDate = DateTime.now();
   DateTime? picked = DateTime.now();
 
-  //Purpose: Allow user to select a date, save selectedDate as global variable
+  //Controller to obtain inputs for description and cost:
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController costController = TextEditingController();
+
+
+  //Purpose: Allows user to select a date, save selectedDate as global variable.
   Future<void> _selectDate(BuildContext context) async {
     picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
+
+    //Only change selectedDate if user has picked a new date, or there is already a date to populate because isEdit = true.
     if (widget.isEdit || (picked != null && picked != selectedDate)) {
       setState(() {
         selectedDate = picked!;
@@ -94,13 +95,17 @@ class _AddPageState extends State<AddPage> {
     }
   }
 
-  //Purpose: When creation of item is done, create an Item object and store it:
+  //Purpose: The method called when user pushes 'Done' on the page. Creates an the correct object, inputs/updates database and returns to previous page.
   _createItem(BuildContext context) {
-    bool noCostEntered = false;
+    bool noCostEntered = false;             //Flag to specifically check that a cost was entered if taskType = Expense.
+
+    //1.) Only continue if there is a description --> Check which item we are creating + create it if input is valid based on isEdit
     if (descriptionController.text != "") {
-      //Get all data needed and make Item object:
+
+      //1a.) Check what item being created
       switch (taskType) {
         case 'Task':
+          //Create/update database based on if we are editing an existing item:
           if (widget.isEdit) {
             Task updatedTask = new Task(id: widget.selectedTask.getId(),
                 description: descriptionController.text,
@@ -114,7 +119,10 @@ class _AddPageState extends State<AddPage> {
             DatabaseHelper.instance.insertTask(newTask.toMapWithoutId());
           }
           break;
+
+
         case 'Reminder':
+          //Create/update database based on if we are editing an existing item:
           if (widget.isEdit) {
             Reminder updatedReminder = new Reminder(
                 id: widget.selectedReminder.getId(),
@@ -130,7 +138,10 @@ class _AddPageState extends State<AddPage> {
                 newReminder.toMapWithoutId());
           }
           break;
+
+
         case 'Expense':
+          //Extra validation that we have a cost inputted + is a double
           if (costController.text != "" && (double.tryParse(costController.text) != null)) {
             if (widget.isEdit) {
               Expense updatedExpense = new Expense(
@@ -149,28 +160,30 @@ class _AddPageState extends State<AddPage> {
                   newExpense.toMapWithoutId());
             }
           }
-          else {
-            // Then change flag to not navigate to back page
 
+          // Then change flag to NOT navigate to back to page_from
+          else {
             noCostEntered= true;
             if(double.tryParse(costController.text) == null){
-              // Then show a snackbar.
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('Cost entered is not valid!')));
             }
             else{
-              // Then show a snackbar.
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('Please fill out all areas.')));
             }
           }
           break;
-        default:
+
+        default:    //No default case, throw error? Show dialog.
           break;
       }
 
-      //2.) Go back to the page came from passing along the new task
+
+      //2.) Go back to the page came from passing along the new task, IF noCostEntered still false.
       if (!noCostEntered) {
+
+        //Check page_from to ensure came from valid page, check using Constants class.
         switch (widget.page_from) {
           case Constants.KEY_HOME:
             Navigator.push(context, MaterialPageRoute(
@@ -198,8 +211,9 @@ class _AddPageState extends State<AddPage> {
         }
       }
     }
+
+    //If description was not inputted, automatically show error + do not attempt any item creation.
     else{
-      // Then show a snackbar.
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Please fill out all areas.')));
     }
@@ -211,17 +225,16 @@ class _AddPageState extends State<AddPage> {
 
     //If we are editing something, pre-fill values
     if (widget.isEdit) {
-      print("yes we are editing something");
+
+      //Check what item we are editing by checking which item does NOT have default input values
       if(widget.selectedTask.getId() != -1){
-        print("was a task");
         descriptionController.text = widget.selectedTask.getDescription();
         taskType = "Task";
-        if(picked != selectedDate){
+        if(picked != selectedDate){         //Toggle the picked variable to ensure it gets updated if user attempts to pick new date.
           selectedDate = widget.selectedTask.getDate();
         }
       }
       else if(widget.selectedExpense.getId() != -2){
-        print("was an expense");
         descriptionController.text = widget.selectedExpense.getDescription();
 
         costController.text = widget.selectedExpense.getCost().toString();
@@ -231,7 +244,6 @@ class _AddPageState extends State<AddPage> {
         }
       }
       else{
-        print("was a reminder");
         descriptionController.text = widget.selectedReminder.getDescription();
         taskType = "Reminder";
         if(picked != selectedDate){
@@ -240,8 +252,12 @@ class _AddPageState extends State<AddPage> {
       }
     }
 
+
+    //Format the page:
     return Scaffold(
       resizeToAvoidBottomInset: false,
+
+        //--------------------------------App Bar---------------------------------------
         appBar: AppBar(
             title: Row(
               children: [
@@ -249,6 +265,8 @@ class _AddPageState extends State<AddPage> {
                     margin: EdgeInsets.only(left: 72),
                     child: Text('Add New Item')),
                 Spacer(),
+
+                //settings icon + event
                 IconButton(onPressed: (){
                   print("You pushed the settings button");
                   Navigator.push(context, MaterialPageRoute(
@@ -258,15 +276,19 @@ class _AddPageState extends State<AddPage> {
               ],
             ),
             backgroundColor: Color(0xFF3C99DC),
+
+            //Back icon --> go to the page that called us.
             leading: new IconButton(
                 icon: new Icon(Icons.arrow_back_ios_outlined),
-                onPressed: () //TODO: Define a back button function, also this pops off the current screen so yes good stuff - Navigator.of(context).pop(),
+                onPressed: ()
                 {
                   Navigator.of(context).pop();
                 }
             )
         ),
         backgroundColor: Color(0xFFD5F3FE),
+
+        //Configure the bottom nav bar with same buttons + events.
         bottomNavigationBar: Container(
           height: 50,
           child: BottomAppBar(
@@ -285,7 +307,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
 
-                  //3.) Add Icon: Add Dialog page - TODO
+                  //2.) Add Icon: Add Dialog page
                   Expanded(
                     child: IconButton(
                         onPressed: (){
@@ -296,7 +318,7 @@ class _AddPageState extends State<AddPage> {
                     ),
                   ),
 
-                  //4.) Money Icon: ExpensesPage - TODO: fix overflow
+                  //3.) Money Icon: ExpensesPage -
                   Expanded(
                     child: IconButton(
                         onPressed: () {
@@ -311,7 +333,9 @@ class _AddPageState extends State<AddPage> {
           ),
         ),
 
+
       body:Container(
+        //Background color gradient:
           decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,

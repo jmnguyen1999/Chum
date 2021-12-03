@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:chum/add_dialog.dart';
-import 'package:chum/models/items/reminder.dart';
-import 'package:chum/models/items/task.dart';
 import 'package:chum/pages/bottom_navigation/home_page.dart';
-import 'package:chum/sqLite/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/bottom_navigation/add_page.dart';
-import 'pages/bottom_navigation/expenses_page.dart';
-import 'constants.dart' as Constants;
 
+/*
+main.dart
+Purpose:      Starts the entire app, displays a SplashPage for a few seconds, then navigates HomePage from home_page.dart.
+
+
+ */
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
@@ -36,6 +35,7 @@ class SplashPage extends StatefulWidget {
   @override
   _SplashPageState createState() => _SplashPageState();
 }
+
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
@@ -49,6 +49,8 @@ class _SplashPageState extends State<SplashPage> {
         )
     );
   }
+
+  //Purpose: Called automatically to build the page:
   @override
   Widget build(BuildContext context) {
     return Container(

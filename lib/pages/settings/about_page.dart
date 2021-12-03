@@ -4,6 +4,11 @@ import 'package:chum/pages/bottom_navigation/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart' as Constants;
+
+/*
+about_page.dart
+Purpose:      Displays information about About. What's next for Chum, what is it? No actual functionality other than displaying Strings. Linked to settings_page
+ */
 class AboutPage extends StatefulWidget {
   AboutPage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -178,7 +183,7 @@ class _AboutPageState extends State<AboutPage> {
                                     ),
                                     Container(
                                         margin: EdgeInsets.only(left: 25, right: 25, top: 15),
-                                        child: Text("We\'re currently working on integrating an alarm reminder system so that Chum can better help keep you accountable! The idea is to set alarms automatically on your phone to remind you in advance what you need to do and when. Keep on the lookout for the next update!\n\nChum is also soon looking to expand to Chums! Chum originally is an individual app looking to aid one person in organizing their tasks, however, Chums is looking to help groups of people plan and design their tasks as a group! More details will come soon!\n",
+                                        child: Text("We\'re currently working on integrating an alarm reminder system so that Chum can better help keep you accountable! The idea is to set alarms automatically on your phone to remind you in advance what you need to do and when. Keep on the lookout for the next update!\n",
                                             style: TextStyle(
                                                 fontSize: 16
                                             )
